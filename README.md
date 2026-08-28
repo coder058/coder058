@@ -1,20 +1,18 @@
 # Jordi Lluis
 
-Ruby on Rails, Python, TypeScript & SQL | AI Products, Data Systems and Operational Tools
+Backend & full-stack developer · Python, TypeScript and SQL
 
-I build software around real operational problems: workflows, decisions, data quality and interfaces that people can use under pressure. My background includes logistics operations and team planning, which informs how I approach full-stack products and human-in-the-loop systems.
+I build tools for inspecting job listings, transcripts and recorded market data. These are personal projects, with explicit limitations and reproducible checks.
 
 ## Selected work
 
-- [Polybow Forensics](https://coder058.github.io/profile/#work) — reproducible analysis of live prediction-market activity, risk concentration and missing controls.
-- [DispatchOps](https://coder058.github.io/profile/#work) — playable logistics simulation with a deterministic shift engine and explainable assignment agent.
-- [VÆRN](https://coder058.github.io/profile/#work) — Rails commerce and fulfilment system covering catalogue, variants, payments and stock reservation.
-- [City Gardens](https://github.com/justdevelopin/CityGardens) — team-built Rails platform for gardens, events, parcels and reservations.
-
-## Core stack
-
-Ruby on Rails · Python · TypeScript · JavaScript · SQL · React · Node.js · PostgreSQL · Docker · Git
+- [Relay](https://github.com/coder058/relay) — read-only job research through HTTP and MCP: source quotes, changed duplicates and portable reviews. [Try it](https://relay-ten-zeta.vercel.app/).
+- [Pattern Forge](https://pattern-forge-five.vercel.app/) — replay recorded perpetual markets without exposing future candles, and inspect public Hyperliquid snapshots. Research, not trading recommendations.
+- [Transcript Desk](https://video-ai-digest.vercel.app/) — browser-local subtitle search and manually selected timestamped excerpts. No hosted AI generation or audio transcription.
+- [Polybow](https://polybow-archive.vercel.app/) — reproducible analysis of an anonymized live-trading ledger, including its full negative outcome. Not evidence of profitability.
 
 ## Links
 
 [Portfolio](https://coder058.github.io/profile/) · [Résumé](https://coder058.github.io/profile/assets/jordi-lluis-cv.pdf) · [LinkedIn](https://www.linkedin.com/in/jordi-lluis-14228242a/) · [Email](mailto:joord918@gmail.com)
+
+Earlier learning exercises remain in the repository history; they are not the featured work above.
