@@ -1,10 +1,23 @@
-# AI-assisted engineering: decisions and checks
+# Engineering decisions and checks
 
-Independent full-stack development, with AI coding agents involved in task
+Independent full-stack development, with AI coding tools involved in task
 breakdown, implementation, debugging, refactoring and verification. The work
 is not represented as unaided manual authorship or employment at these projects.
-I set product priorities and review the result through iterative feedback;
-code changes and test execution also involve agents.
+I set product priorities and review results against source evidence and tests.
+
+## Keep the loss in the postmortem
+
+**Polybow: separate observed cash, reconstructed equity and causal inference.**
+The public analysis and browser archive read the same anonymized ledger. The
+postmortem distinguishes the observed liquid peak from a higher reconstructed
+equity curve, reports the negative lifetime settled trading cash result, and
+keeps incomplete bot attribution visible. Archived API-response timings are
+scoped as acknowledgements, not fills. A documented exchange upgrade and later
+performance deterioration overlap in time, but the evidence does not isolate a
+single patch as the cause.
+
+[Analysis and limits](https://github.com/coder058/polybow-case-study) ·
+[Filter regression](https://github.com/coder058/polybow-case-study/blob/main/tests/ledger-ui.test.cjs)
 
 ## From a product goal to working software
 
@@ -35,21 +48,9 @@ This trades apparent completeness for data integrity.
 Python returned a product-manager listing; the revised backend query returned
 a senior role. Search, review and export worked, but eligibility was not
 established. The walkthrough records those failures and the script's new query
-option instead of declaring a successful match. This is the same standard used
-for AI-assisted code: a plausible result must be checked against the actual task.
+option instead of declaring a successful match.
 
 [Observed task, revision and limitations](https://github.com/coder058/relay/blob/main/JOB_SEARCH_WALKTHROUGH.md)
-
-## Responsibility for the result
-
-**Polybow: keep the loss in the postmortem.** Public analysis and the browser
-archive read the same anonymized ledger. Reconciliation assumptions, incomplete
-attribution and the negative outcome remain visible. A UI regression checks
-the empty filter and pagination behaviour; it is not advertised as full browser
-coverage. Publishing a trading experiment does not establish profitability.
-
-[Analysis and limits](https://github.com/coder058/polybow-case-study) ·
-[Filter regression](https://github.com/coder058/polybow-case-study/blob/main/tests/ledger-ui.test.cjs)
 
 These are inspectable engineering examples, not measured productivity gains,
 customer-adoption claims or proof of unattended AI reliability. Using agents to
