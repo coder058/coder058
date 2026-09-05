@@ -1,20 +1,25 @@
 # Jordi Lluis
 
-I like taking a messy question and turning it into something I can run, click and inspect. Coding agents help me explore possible answers; the repositories show what I kept, changed and tested.
+I learned web development at Le Wagon in Barcelona. This is where I keep the exercises, team contributions and independent projects that followed.
 
-## Current projects
+## From Le Wagon
 
-- [Relay](https://github.com/coder058/relay) — four read-only MCP tools behind a React and FastAPI job-research workspace.
-- [Pattern Forge](https://github.com/coder058/pattern-forge) — a React and TypeScript market-data workstation with closed-candle replay.
-- [DispatchOps](https://github.com/coder058/dispatchops) — a React, TypeScript and Node.js dispatch simulator with human-reviewed recommendations.
-- [Polybow](https://github.com/coder058/polybow-case-study) — the development history and full negative outcome of a live Polymarket bot.
+[City Gardens](https://github.com/justdevelopin/CityGardens) was our team project: a Rails and PostgreSQL app for community gardens, events and reservations. The shared commit history shows my contributions.
 
-## Le Wagon foundations
+My Rails exercises cover [CRUD and controllers](https://github.com/coder058/rails-task-manager), [reviews and associations](https://github.com/coder058/rails-yelp-mvp), [flat-record CRUD](https://github.com/coder058/rails-simple-airbnb) and [external API requests](https://github.com/coder058/rails-longest-word-game). The watch-list and wiki repositories are unfinished training scaffolds, not finished applications.
 
-- [City Gardens](https://github.com/justdevelopin/CityGardens) — my Le Wagon team project: a Rails and PostgreSQL application for gardens, events, bookings, parcel reservations, reviews and bookmarks. My contributions remain visible in the shared commit history.
-- Browser APIs — seven focused JavaScript exercises covering `fetch`, HTTP requests, DOM updates, loading and error states: [geocoding](https://github.com/coder058/js-geocoder), [restaurant search](https://github.com/coder058/js-fork-restaurants), [weather](https://github.com/coder058/js-weather), [authenticated POST requests](https://github.com/coder058/js-ask-an-ai), [autocomplete](https://github.com/coder058/js-ajax-autocomplete), [polling and form state](https://github.com/coder058/js-anonymous-chat), and [movie search](https://github.com/coder058/js-ajax-search).
-- Rails exercises — small learning projects for request/controller flow, CRUD, validation, associations and external APIs: [task manager](https://github.com/coder058/rails-task-manager), [Yelp MVP](https://github.com/coder058/rails-yelp-mvp), [simple Airbnb](https://github.com/coder058/rails-simple-airbnb), [longest word game](https://github.com/coder058/rails-longest-word-game), and [stupid coaching](https://github.com/coder058/rails-stupid-coaching).
+The JavaScript exercises focus on small browser interactions: [geocoding](https://github.com/coder058/js-geocoder), [restaurant search](https://github.com/coder058/js-fork-restaurants), [weather](https://github.com/coder058/js-weather), [POST requests](https://github.com/coder058/js-ask-an-ai), [autocomplete](https://github.com/coder058/js-ajax-autocomplete), [chat polling](https://github.com/coder058/js-anonymous-chat) and [movie search](https://github.com/coder058/js-ajax-search).
 
-That work gave me a base in Ruby, Rails, SQL/PostgreSQL, Active Record, MVC, HTML/CSS, Bootstrap, JavaScript, Stimulus/Hotwire, AJAX, REST APIs, Git and team delivery. My newer projects extend it with React, TypeScript, Python/FastAPI, MCP, WebSockets, Docker and automated tests.
+That foundation includes Ruby, Rails, PostgreSQL, Active Record, MVC, HTML/CSS, Bootstrap, JavaScript, Stimulus, REST APIs, Git and working in a team.
 
-[Portfolio](https://coder058.github.io/profile/)
+## What I am working on now
+
+- [Polybow](https://github.com/coder058/polybow-case-study): the postmortem of my Polymarket bot. It compares order logs with wallet cash flows and documents the negative result.
+- [Pattern Forge](https://github.com/coder058/pattern-forge): a chart workspace. Replaying a recording keeps future candles out of indicators and higher-timeframe calculations.
+- [Relay](https://github.com/coder058/relay): a job-research service exposed through HTTP and MCP. Reviews retain exact requirement quotes and duplicate source versions.
+
+[DispatchOps](https://github.com/coder058/dispatchops) is a smaller simulation experiment: queued routes, skill constraints and breakdowns. Its public demo runs in browser memory; the local API is separate.
+
+I use coding agents during development. I choose the problem, inspect changes and check the behaviour; each repository explains its setup and limitations.
+
+[Portfolio and résumé](https://coder058.github.io/profile/) · [Engineering notes](ENGINEERING.md)
