@@ -39,7 +39,7 @@ option instead of declaring a successful match.
 
 ## Keep the loss in the postmortem
 
-**Polybow: separate observed cash, reconstructed equity and causal inference.**
+**Python trading bot: separate observed cash, reconstructed equity and causal inference.**
 The public analysis and browser archive read the same anonymized ledger. The
 postmortem distinguishes the observed liquid peak from a higher reconstructed
 equity curve, reports the negative lifetime settled trading cash result, and

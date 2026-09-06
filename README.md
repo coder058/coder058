@@ -28,7 +28,7 @@ The public demo does not serve PostgreSQL. CI builds the Docker image and checks
 
 Matching is literal. Coverage is one public board page plus pasted text.
 
-## Polybow
+## Python trading bot
 
 **Decision:** publish the loss and keep branch prices distinct. Early tickets were often $0.96–$0.99; StratA used $0.40–$0.72 with 11–15 seconds remaining; UC looked at leftover $0.01–$0.20 asks.
 
