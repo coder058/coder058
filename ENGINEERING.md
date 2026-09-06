@@ -18,11 +18,10 @@ that database.
 
 ## Preserve the original requirement
 
-**Relay: make job research inspectable.** The implementation connects a React
-interface, FastAPI service, public job-board data and HTTP/MCP tools. Reviews
+**Relay: quotes for an agent or a human, not a job board.** The implementation connects a React
+interface, FastAPI service and HTTP/MCP tools to one matcher. Reviews
 retain source quotations and can be exported. Canonical URLs identify duplicates
-without discarding changed listing text. A deliberately read-only scope keeps
-research separate from submitting an application.
+without discarding changed listing text. Read-only scope keeps research separate from submitting an application. Arbeitnow is a demo snapshot; paste is the intended input.
 
 [Implementation and setup](https://github.com/coder058/relay) ·
 [Validation and duplicate tests](https://github.com/coder058/relay/blob/main/backend/tests/test_job_evidence.py)

@@ -20,13 +20,13 @@ The public demo does not serve PostgreSQL. CI builds the Docker image and checks
 
 ## Relay
 
-**Decision:** keep the original job text next to each mention. Do not ask a model to decide eligibility.
+**Decision:** return quotes, not a hiring score. The same matcher serves a React UI and four read-only MCP tools.
 
-**What I built:** one Python/FastAPI service behind a React UI and four read-only MCP tools (`search_job_board`, `summarize_job_board`, `review_job_evidence`, `export_job_review`). Duplicates keep changed wording.
+**What I built:** one Python/FastAPI service (`search_job_board`, `summarize_job_board`, `review_job_evidence`, `export_job_review`). Duplicates keep changed wording. Paste is the real input; Arbeitnow is a demo snapshot, not a job board.
 
 **Code:** [`backend/`](https://github.com/coder058/relay/tree/main/backend) · [evidence tests](https://github.com/coder058/relay/blob/main/backend/tests/test_job_evidence.py) · [MCP](https://github.com/coder058/relay/blob/main/backend/tests/test_job_mcp.py)
 
-Matching is literal. Coverage is one public board page plus pasted text.
+Matching is literal. An agent that calls these tools can still summarise; Relay does not decide eligibility.
 
 ## Python trading bot
 
