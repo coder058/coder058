@@ -2,7 +2,7 @@
 
 Software developer in Amsterdam. I build web interfaces and APIs, then test how they fail.
 
-[Portfolio](https://coder058.github.io/profile/) · [Résumé](https://coder058.github.io/profile/resume.html) · [Engineering notes](ENGINEERING.md)
+[Portfolio](https://coder058.github.io/profile/) · [Résumé](https://coder058.github.io/profile/resume.html) · [“TAPE”](https://coder058.github.io/profile/tape/) · [“HOST”](https://coder058.github.io/profile/host/) · [Engineering notes](ENGINEERING.md)
 
 ## Pattern Forge
 
