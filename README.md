@@ -2,36 +2,50 @@
 
 Software developer in Amsterdam. I build web interfaces and APIs, then test how they fail.
 
-[Portfolio and résumé packs](https://coder058.github.io/profile/) · [Résumé](https://coder058.github.io/profile/resume.html) · [Apply pack](https://coder058.github.io/profile/apply-pack.json) · [Engineering notes](ENGINEERING.md)
+[Portfolio](https://coder058.github.io/profile/) · [Résumé](https://coder058.github.io/profile/resume.html) · [Engineering notes](ENGINEERING.md)
 
-## Selected projects
+## Pattern Forge
 
-**[Polybow](https://github.com/coder058/polybow-case-study)** — a live Polymarket system: last-second cheap asks left on the book, execution from an AWS Lightsail VPS in Dublin, and dated JSONL recordings. Live trading stopped; the investigation did not.
+**Decision:** replay must not see later candles. Indicators and higher-timeframe aggregates use only the selected prefix; incomplete groups are omitted, not guessed.
 
-[Walk through Polybow](https://coder058.github.io/profile/projects/polybow.html) · [How the data was organised](https://coder058.github.io/profile/projects/polybow.html#data) · [Open the archive](https://polybow-archive.vercel.app/)
+**What I built:** React/TypeScript workspace, Next.js candle API, live mid-price on a separate WebSocket, PostgreSQL persistence for local/CI.
 
-**[Pattern Forge](https://github.com/coder058/pattern-forge)** — a market-data workspace: live public quotes, a validated candle API and recorded-market replay that keeps later prices out of earlier calculations. Docker and PostgreSQL persistence are checked in CI; the public Vercel demo does not serve that database.
+**Code:** [`app/`](https://github.com/coder058/pattern-forge/tree/main/app) · [closed-candle tests](https://github.com/coder058/pattern-forge/blob/main/tests/public-market.test.mjs) · [ingest](https://github.com/coder058/pattern-forge/tree/main/ingest)
 
-[Walk through Pattern Forge](https://coder058.github.io/profile/projects/pattern-forge.html) · [How the data was organised](https://coder058.github.io/profile/projects/pattern-forge.html#data) · [Open the demo](https://pattern-forge-five.vercel.app/)
+```
+npm ci && npm test && npm run build
+```
 
-**[Relay](https://github.com/coder058/relay)** — a job-requirement review tool. A React interface and four read-only MCP tools share one Python service, so each mention stays next to the original wording.
+The public demo does not serve PostgreSQL. CI builds the Docker image and checks that stored rows survive a database restart.
 
-[Walk through Relay](https://coder058.github.io/profile/projects/relay.html) · [How the data was organised](https://coder058.github.io/profile/projects/relay.html#data) · [Open the demo](https://relay-ten-zeta.vercel.app/)
+## Relay
 
-I use coding agents while I work. I choose the problem, inspect the changes and check the behaviour. Each repository states what the work cannot do.
+**Decision:** keep the original job text next to each mention. Do not ask a model to decide eligibility.
 
-## More challenges
+**What I built:** one Python/FastAPI service behind a React UI and four read-only MCP tools. Duplicates keep changed wording.
 
-Other public GitHub work, kept separate from the three selected projects. Course labs and practice repos — not production products. I do not claim every Le Wagon Kitt challenge.
+**Code:** [`backend/`](https://github.com/coder058/relay/tree/main/backend) · [evidence tests](https://github.com/coder058/relay/blob/main/backend/tests/test_job_evidence.py) · [MCP](https://github.com/coder058/relay/blob/main/backend/tests/test_job_mcp.py)
 
-**Other projects**
+Matching is literal. Coverage is one public board page plus pasted text.
 
-- **[DispatchOps](https://github.com/coder058/dispatchops)** — turn-based dispatch simulator with inspectable rules. Synthetic data; the public game runs in the browser.
-- **[Transcript Desk](https://github.com/coder058/transcript-desk)** — browser-local search of TXT, SRT and VTT files. Manual curation; no generated transcript.
-- **[City Gardens](https://github.com/justdevelopin/CityGardens)** — Le Wagon team project: Rails and PostgreSQL for gardens, events and reservations. Shared work, not sole-authored, and not maintained as a product. [Walk through](https://coder058.github.io/profile/projects/city-gardens.html) · [How the data was organised](https://coder058.github.io/profile/projects/city-gardens.html#data)
+## Polybow
 
-**API labs** — seven public JavaScript browser exercises: [geocoder](https://github.com/coder058/js-geocoder), [restaurant search](https://github.com/coder058/js-fork-restaurants), [weather](https://github.com/coder058/js-weather), [ask an AI](https://github.com/coder058/js-ask-an-ai), [autocomplete](https://github.com/coder058/js-ajax-autocomplete), [chat polling](https://github.com/coder058/js-anonymous-chat), [movie search](https://github.com/coder058/js-ajax-search).
+**Decision:** publish the loss and keep branch prices distinct. Early tickets were often $0.96–$0.99; StratA used $0.40–$0.72 with 11–15 seconds remaining; UC looked at leftover $0.01–$0.20 asks.
 
-**Rails exercises** — [Stupid Coaching](https://github.com/coder058/rails-stupid-coaching), [Longest Word Game](https://github.com/coder058/rails-longest-word-game), [Task Manager](https://github.com/coder058/rails-task-manager), [Yelp MVP](https://github.com/coder058/rails-yelp-mvp), [Simple Airbnb](https://github.com/coder058/rails-simple-airbnb). The [watch-list](https://github.com/coder058/rails-watch-list) and [wiki](https://github.com/coder058/rails-wikinimous) repositories are unfinished training scaffolds.
+**What is public:** ledger script, timing parser, browser case study. The private bot is not in this repository. Live trading stopped.
 
-That training covered Ruby, Rails, PostgreSQL, Active Record, MVC, HTML/CSS, Bootstrap, JavaScript, Stimulus, REST APIs, Git and working in a team.
+**Code:** [`analyze.py`](https://github.com/coder058/polybow-case-study/blob/main/analyze.py) · [EVIDENCE.md](https://github.com/coder058/polybow-case-study/blob/main/EVIDENCE.md)
+
+An API acknowledgement is not a fill. Dublin was not compared with another region.
+
+## City Gardens (team, 2023)
+
+Le Wagon Barcelona. Rails and PostgreSQL. Not sole-authored and not maintained.
+
+My merged pull requests: [parcel reservations](https://github.com/justdevelopin/CityGardens/pull/37), [add-event button](https://github.com/justdevelopin/CityGardens/pull/38), [logout](https://github.com/justdevelopin/CityGardens/pull/39), [styles](https://github.com/justdevelopin/CityGardens/pull/47), [fontsize](https://github.com/justdevelopin/CityGardens/pull/50). I also contributed event-index partials, a search bar and Cloudinary for event photos. That is not the whole schema.
+
+[Schema](https://github.com/justdevelopin/CityGardens/blob/master/db/schema.rb)
+
+## Other public exercises
+
+[DispatchOps](https://github.com/coder058/dispatchops) · [Transcript Desk](https://github.com/coder058/transcript-desk) · [API labs](https://github.com/coder058?tab=repositories&q=js-) · [Rails labs](https://github.com/coder058?tab=repositories&q=rails-)
