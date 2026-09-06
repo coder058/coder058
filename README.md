@@ -2,7 +2,7 @@
 
 Software developer in Amsterdam. I build web interfaces and APIs, then test how they fail.
 
-[Portfolio and résumé](https://coder058.github.io/profile/) · [Engineering notes](ENGINEERING.md)
+[Portfolio and résumé packs](https://coder058.github.io/profile/) · [Résumé](https://coder058.github.io/profile/resume.html) · [Engineering notes](ENGINEERING.md)
 
 ## Selected projects
 
