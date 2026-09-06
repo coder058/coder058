@@ -6,6 +6,10 @@ Software developer in Amsterdam. I build web interfaces and APIs, then test how 
 
 ## Selected projects
 
+**[Polybow](https://github.com/coder058/polybow-case-study)** — a live Polymarket system: last-second cheap asks left on the book, execution from an AWS Lightsail VPS in Dublin, and dated JSONL recordings. Live trading stopped; the investigation did not.
+
+[Walk through Polybow](https://coder058.github.io/profile/projects/polybow.html) · [Open the archive](https://polybow-archive.vercel.app/)
+
 **[Pattern Forge](https://github.com/coder058/pattern-forge)** — a market-data workspace: live public quotes, a validated candle API and recorded-market replay that keeps later prices out of earlier calculations. Docker and PostgreSQL persistence are checked in CI; the public Vercel demo does not serve that database.
 
 [Walk through Pattern Forge](https://coder058.github.io/profile/projects/pattern-forge.html) · [Open the demo](https://pattern-forge-five.vercel.app/)
@@ -13,10 +17,6 @@ Software developer in Amsterdam. I build web interfaces and APIs, then test how 
 **[Relay](https://github.com/coder058/relay)** — a job-requirement review tool. A React interface and four read-only MCP tools share one Python service, so each mention stays next to the original wording.
 
 [Walk through Relay](https://coder058.github.io/profile/projects/relay.html) · [Open the demo](https://relay-ten-zeta.vercel.app/)
-
-**[Polybow](https://github.com/coder058/polybow-case-study)** — the postmortem of a Polymarket experiment. It reconciles the market ledger, separates acknowledgements from fills and documents the losses.
-
-[Walk through Polybow](https://coder058.github.io/profile/projects/polybow.html) · [Open the archive](https://polybow-archive.vercel.app/)
 
 I use coding agents while I work. I choose the problem, inspect the changes and check the behaviour. Each repository states what the work cannot do.
 
