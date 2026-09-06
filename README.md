@@ -20,16 +20,18 @@ Software developer in Amsterdam. I build web interfaces and APIs, then test how 
 
 I use coding agents while I work. I choose the problem, inspect the changes and check the behaviour. Each repository states what the work cannot do.
 
-## Training
+## More challenges
 
-I learned web development at Le Wagon in Barcelona in 2023.
+Other public GitHub work, kept separate from the three selected projects. Course labs and practice repos — not production products. I do not claim every Le Wagon Kitt challenge.
 
-**[City Gardens](https://github.com/justdevelopin/CityGardens)** was our team project: a Rails and PostgreSQL app for community gardens, events and reservations. The shared commit history shows my contributions. It is not sole-authored and is not maintained as a product.
+**Other projects**
 
-[Walk through City Gardens](https://coder058.github.io/profile/projects/city-gardens.html)
+- **[DispatchOps](https://github.com/coder058/dispatchops)** — turn-based dispatch simulator with inspectable rules. Synthetic data; the public game runs in the browser.
+- **[Transcript Desk](https://github.com/coder058/transcript-desk)** — browser-local search of TXT, SRT and VTT files. Manual curation; no generated transcript.
+- **[City Gardens](https://github.com/justdevelopin/CityGardens)** — Le Wagon team project: Rails and PostgreSQL for gardens, events and reservations. Shared work, not sole-authored, and not maintained as a product. [Walk through City Gardens](https://coder058.github.io/profile/projects/city-gardens.html)
 
-The [seven API labs](https://github.com/coder058/lewagon-api-lab) are small JavaScript browser exercises: geocoding, restaurant search, weather, POST requests, autocomplete, chat polling and movie search.
+**API labs** — seven public JavaScript browser exercises: [geocoder](https://github.com/coder058/js-geocoder), [restaurant search](https://github.com/coder058/js-fork-restaurants), [weather](https://github.com/coder058/js-weather), [ask an AI](https://github.com/coder058/js-ask-an-ai), [autocomplete](https://github.com/coder058/js-ajax-autocomplete), [chat polling](https://github.com/coder058/js-anonymous-chat), [movie search](https://github.com/coder058/js-ajax-search).
 
-My Rails exercises cover [CRUD and controllers](https://github.com/coder058/rails-task-manager), [reviews and associations](https://github.com/coder058/rails-yelp-mvp), [flat-record CRUD](https://github.com/coder058/rails-simple-airbnb) and [external API requests](https://github.com/coder058/rails-longest-word-game). The watch-list and wiki repositories are unfinished training scaffolds, not finished applications.
+**Rails exercises** — [Stupid Coaching](https://github.com/coder058/rails-stupid-coaching), [Longest Word Game](https://github.com/coder058/rails-longest-word-game), [Task Manager](https://github.com/coder058/rails-task-manager), [Yelp MVP](https://github.com/coder058/rails-yelp-mvp), [Simple Airbnb](https://github.com/coder058/rails-simple-airbnb). The [watch-list](https://github.com/coder058/rails-watch-list) and [wiki](https://github.com/coder058/rails-wikinimous) repositories are unfinished training scaffolds.
 
 That training covered Ruby, Rails, PostgreSQL, Active Record, MVC, HTML/CSS, Bootstrap, JavaScript, Stimulus, REST APIs, Git and working in a team.
