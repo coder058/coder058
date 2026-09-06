@@ -1,6 +1,6 @@
 # Jordi Lluis
 
-Software developer in Amsterdam. I build web interfaces and APIs, then test how they fail.
+Market-data interfaces, HTTP APIs and small developer tools. React and TypeScript on the front, Python or Rails on the back.
 
 [Portfolio](https://coder058.github.io/profile/) · [Résumé](https://coder058.github.io/profile/resume.html) · [“TAPE”](https://coder058.github.io/profile/tape/) · [“HOST”](https://coder058.github.io/profile/host/) · [Engineering notes](ENGINEERING.md)
 
