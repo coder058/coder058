@@ -22,7 +22,7 @@ The public demo does not serve PostgreSQL. CI builds the Docker image and checks
 
 **Decision:** keep the original job text next to each mention. Do not ask a model to decide eligibility.
 
-**What I built:** one Python/FastAPI service behind a React UI and four read-only MCP tools. Duplicates keep changed wording.
+**What I built:** one Python/FastAPI service behind a React UI and four read-only MCP tools (`search_job_board`, `summarize_job_board`, `review_job_evidence`, `export_job_review`). Duplicates keep changed wording.
 
 **Code:** [`backend/`](https://github.com/coder058/relay/tree/main/backend) · [evidence tests](https://github.com/coder058/relay/blob/main/backend/tests/test_job_evidence.py) · [MCP](https://github.com/coder058/relay/blob/main/backend/tests/test_job_mcp.py)
 
