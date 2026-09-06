@@ -15,10 +15,8 @@ That foundation includes Ruby, Rails, PostgreSQL, Active Record, MVC, HTML/CSS, 
 ## What I am working on now
 
 - [Polybow](https://github.com/coder058/polybow-case-study): the postmortem of my Polymarket bot. It compares order logs with wallet cash flows and documents the negative result.
-- [Pattern Forge](https://github.com/coder058/pattern-forge): a chart workspace. Replaying a recording keeps future candles out of indicators and higher-timeframe calculations.
+- [Pattern Forge](https://github.com/coder058/pattern-forge): a chart workspace with a candle API and live public quotes. Replay keeps future candles out of calculations; the repository includes a Docker build and failure-handling tests.
 - [Relay](https://github.com/coder058/relay): a job-research service exposed through HTTP and MCP. Reviews retain exact requirement quotes and duplicate source versions.
-
-[DispatchOps](https://github.com/coder058/dispatchops) is a smaller simulation experiment: queued routes, skill constraints and breakdowns. Its public demo runs in browser memory; the local API is separate.
 
 I use coding agents during development. I choose the problem, inspect changes and check the behaviour; each repository explains its setup and limitations.
 
