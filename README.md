@@ -1,14 +1,18 @@
 # Jordi Lluis
 
-Market-data interfaces, HTTP APIs and small developer tools. React and TypeScript on the front, Python or Rails on the back.
+Amsterdam. Market-data interfaces, HTTP APIs and small developer tools. React and TypeScript on the front, Python or Rails on the back.
 
-[Portfolio](https://coder058.github.io/profile/) · [Résumé](https://coder058.github.io/profile/resume.html) · [“TAPE”](https://coder058.github.io/profile/tape/) · [“HOST”](https://coder058.github.io/profile/host/) · [Engineering notes](ENGINEERING.md)
+[Portfolio](https://coder058.github.io/profile/) · [Résumé](https://coder058.github.io/profile/resume.html) · [Engineering notes](ENGINEERING.md)
+
+**Live demos:** [Pattern Forge](https://pattern-forge-five.vercel.app/) · [Relay](https://relay-ten-zeta.vercel.app/) · [Python trading bot archive](https://polybow-archive.vercel.app/)
 
 ## Pattern Forge
 
-**Decision:** replay must not see later candles. Indicators and higher-timeframe aggregates use only the selected prefix; incomplete groups are omitted, not guessed.
+[![CI](https://github.com/coder058/pattern-forge/actions/workflows/check.yml/badge.svg)](https://github.com/coder058/pattern-forge/actions/workflows/check.yml)
 
-**What I built:** React/TypeScript workspace, Next.js candle API, live mid-price on a separate WebSocket, PostgreSQL persistence for local/CI.
+**Architecture:** browser → Next.js candle API → Hyperliquid public quotes. A separate WebSocket carries live mid-price and does not write into replay. Recorded replay uses only the selected prefix; incomplete higher-timeframe groups are omitted, not guessed. The public demo does not serve PostgreSQL; persistence is for local use and CI.
+
+**What I built:** React/TypeScript workspace, validated candle snapshots, Docker build checks and failure-handling tests.
 
 **Code:** [`app/`](https://github.com/coder058/pattern-forge/tree/main/app) · [closed-candle tests](https://github.com/coder058/pattern-forge/blob/main/tests/public-market.test.mjs) · [ingest](https://github.com/coder058/pattern-forge/tree/main/ingest)
 
@@ -16,13 +20,13 @@ Market-data interfaces, HTTP APIs and small developer tools. React and TypeScrip
 npm ci && npm test && npm run build
 ```
 
-The public demo does not serve PostgreSQL. CI builds the Docker image and checks that stored rows survive a database restart.
-
 ## Relay
 
-**Decision:** return quotes, not a hiring score. The same matcher serves a React UI and four read-only MCP tools.
+[![CI](https://github.com/coder058/relay/actions/workflows/check.yml/badge.svg)](https://github.com/coder058/relay/actions/workflows/check.yml)
 
-**What I built:** one Python/FastAPI service (`search_job_board`, `summarize_job_board`, `review_job_evidence`, `export_job_review`). Duplicates keep changed wording. Paste is the real input; Arbeitnow is a demo snapshot, not a job board.
+**Architecture:** React UI → stateless FastAPI → one deterministic matcher, also exposed as four read-only MCP tools. Returns quoted sentences, not a hiring score. Paste is the real input; Arbeitnow is a bounded demo snapshot.
+
+**What I built:** `search_job_board`, `summarize_job_board`, `review_job_evidence`, `export_job_review`. Duplicates keep changed wording.
 
 **Code:** [`backend/`](https://github.com/coder058/relay/tree/main/backend) · [evidence tests](https://github.com/coder058/relay/blob/main/backend/tests/test_job_evidence.py) · [MCP](https://github.com/coder058/relay/blob/main/backend/tests/test_job_mcp.py)
 
@@ -38,6 +42,10 @@ Matching is literal. An agent that calls these tools can still summarise; Relay 
 
 An API acknowledgement is not a fill. Dublin was not compared with another region.
 
+## Open source
+
+Merged [Haystack #12635](https://github.com/deepset-ai/haystack/pull/12635): AutoMergingRetriever now treats `0` as a stored hierarchy value, not missing metadata. That is one accepted fix, not Haystack product work.
+
 ## City Gardens (team, 2023)
 
 Le Wagon Barcelona. Rails and PostgreSQL. Not sole-authored and not maintained.
@@ -48,4 +56,4 @@ My merged pull requests: [parcel reservations](https://github.com/justdevelopin/
 
 ## Other public exercises
 
-[DispatchOps](https://github.com/coder058/dispatchops) · [Transcript Desk](https://github.com/coder058/transcript-desk) · [API labs](https://github.com/coder058?tab=repositories&q=js-) · [Rails labs](https://github.com/coder058?tab=repositories&q=rails-)
+[DispatchOps](https://github.com/coder058/dispatchops) · [Transcript Desk](https://github.com/coder058/transcript-desk) · [Wikinimous](https://github.com/coder058/rails-wikinimous) · [API labs](https://github.com/coder058?tab=repositories&q=js-) · [Rails labs](https://github.com/coder058?tab=repositories&q=rails-)
