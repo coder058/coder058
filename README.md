@@ -1,6 +1,6 @@
 # Jordi Lluis
 
-Amsterdam. I build small products a person can open, and AI tools that share the same path. An agent can call them; a human still reads the output.
+Amsterdam. I like tackling everyday problems that used to take too long, with the tools that are actually useful now. Then I check whether what I built works.
 
 [Portfolio](https://coder058.github.io/profile/) · [Résumé](https://coder058.github.io/profile/resume.html) · [Engineering notes](ENGINEERING.md)
 
