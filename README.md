@@ -10,7 +10,9 @@ Amsterdam. Market-data interfaces, HTTP APIs and small developer tools. React an
 
 [![CI](https://github.com/coder058/pattern-forge/actions/workflows/check.yml/badge.svg)](https://github.com/coder058/pattern-forge/actions/workflows/check.yml)
 
-**Architecture:** browser → Next.js candle API → Hyperliquid public quotes. A separate WebSocket carries live mid-price and does not write into replay. Recorded replay uses only the selected prefix; incomplete higher-timeframe groups are omitted, not guessed. The public demo does not serve PostgreSQL; persistence is for local use and CI.
+**Result:** replay without look-ahead; CI runs tests, Docker and a PostgreSQL restart. The public demo does not serve that database.
+
+**Architecture:** browser → Next.js candle API → Hyperliquid public quotes. A separate WebSocket carries live mid-price and does not write into replay. Recorded replay uses only the selected prefix; incomplete higher-timeframe groups are omitted, not guessed. Persistence is for local use and CI.
 
 **What I built:** React/TypeScript workspace, validated candle snapshots, Docker build checks and failure-handling tests.
 
