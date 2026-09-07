@@ -1,6 +1,6 @@
 # Jordi Lluis
 
-Amsterdam. Market-data interfaces, HTTP APIs and small developer tools. React and TypeScript on the front, Python or Rails on the back.
+Amsterdam. I build small products a person can open, and AI tools that share the same path. An agent can call them; a human still reads the output.
 
 [Portfolio](https://coder058.github.io/profile/) · [Résumé](https://coder058.github.io/profile/resume.html) · [Engineering notes](ENGINEERING.md)
 
