@@ -4,7 +4,7 @@ Amsterdam. I like tackling everyday problems that used to take too long, with th
 
 [Portfolio](https://coder058.github.io/profile/) · [Résumé](https://coder058.github.io/profile/resume.html) · [Engineering notes](ENGINEERING.md)
 
-**Live demos:** [Pattern Forge](https://pattern-forge-five.vercel.app/) · [Relay](https://relay-ten-zeta.vercel.app/) · [Python trading bot archive](https://polybow-archive.vercel.app/)
+**Live demos:** [Pattern Forge](https://pattern-forge-five.vercel.app/) · [Info Desk](https://coder058.github.io/info-desk/) · [Relay](https://relay-ten-zeta.vercel.app/) · [Python trading bot archive](https://polybow-archive.vercel.app/)
 
 ## Pattern Forge
 
@@ -20,6 +20,22 @@ Amsterdam. I like tackling everyday problems that used to take too long, with th
 
 ```
 npm ci && npm test && npm run build
+```
+
+## Info Desk
+
+[![CI](https://github.com/coder058/info-desk/actions/workflows/ci.yml/badge.svg)](https://github.com/coder058/info-desk/actions/workflows/ci.yml)
+
+**Result:** a source batch in, a draft out. SQLite writes a note only after a human approves. Demo and evals, not a newsroom in production.
+
+**Architecture:** three tools (`fetch_source`, `lookup_license`, `search_prior_notes`) → Python extract/validate → pending draft → `approve()`. Ollama is optional and off in CI.
+
+**What I built:** conflict/single-source/jailbreak/429/reject harness that scores the database.
+
+**Code:** [info-desk](https://github.com/coder058/info-desk) · [harness](https://github.com/coder058/info-desk/blob/main/src/infodesk/harness.py)
+
+```
+python -m pip install -e ".[dev]" && python -m pytest
 ```
 
 ## Relay
