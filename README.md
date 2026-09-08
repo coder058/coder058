@@ -26,11 +26,11 @@ npm ci && npm test && npm run build
 
 [![CI](https://github.com/coder058/info-desk/actions/workflows/ci.yml/badge.svg)](https://github.com/coder058/info-desk/actions/workflows/ci.yml)
 
-**Result:** a source batch in, a draft out. SQLite writes a note only after a human approves. Demo and evals, not a newsroom in production.
+**Result:** OFAC licenses, the White House oil fact sheet, and AP quotes on one claims table. SQLite writes a note only after a human approves. Demo and evals, not a newsroom in production.
 
-**Architecture:** three tools (`fetch_source`, `lookup_license`, `search_prior_notes`) → Python extract/validate → pending draft → `approve()`. Ollama is optional and off in CI.
+**Architecture:** three tools (`fetch_source`, `lookup_license`, `search_prior_notes`) → Python claims table / named quantities / license parse → pending draft → `approve()`. Ollama is optional and off in CI.
 
-**What I built:** conflict/single-source/jailbreak/429/reject harness that scores the database.
+**What I built:** a comparison of three public recordings (not synthetic barrel pages). Ranking conflict, OFAC scope gap, single-source royalties, jailbreak, 429 retry, and human reject — scored against SQLite.
 
 **Code:** [info-desk](https://github.com/coder058/info-desk) · [harness](https://github.com/coder058/info-desk/blob/main/src/infodesk/harness.py)
 
