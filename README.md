@@ -1,6 +1,8 @@
 # Jordi Lluis
 
-Amsterdam. I like tackling everyday problems that used to take too long, with the tools that are actually useful now. Then I check whether what I built works.
+Amsterdam. This page is the code index: what each repository does, how the pieces
+fit together and the command that runs it. The written-up version, with the
+reasoning and the data tables, is on the [portfolio](https://coder058.github.io/profile/).
 
 [Portfolio](https://coder058.github.io/profile/) · [Résumé](https://coder058.github.io/profile/resume.html) · [Engineering notes](ENGINEERING.md)
 
@@ -26,11 +28,13 @@ npm ci && npm test && npm run build
 
 [![CI](https://github.com/coder058/info-desk/actions/workflows/ci.yml/badge.svg)](https://github.com/coder058/info-desk/actions/workflows/ci.yml)
 
-**Result:** OFAC licenses, the White House oil fact sheet, and AP quotes on one claims table. SQLite writes a note only after a human approves. Demo and evals, not a newsroom in production.
+**Result:** OFAC licenses, the White House oil fact sheet and AP quotes on one claims table, each cell carrying the sentence it came from. SQLite writes a note only after a human approves.
 
 **Architecture:** three tools (`fetch_source`, `lookup_license`, `search_prior_notes`) → Python claims table / named quantities / license parse → pending draft → `approve()`. Ollama is optional and off in CI.
 
-**What I built:** a comparison of three public recordings (not synthetic barrel pages). Ranking conflict, OFAC scope gap, single-source royalties, jailbreak, 429 retry, and human reject — scored against SQLite.
+**What I built:** the claims table distinguishes *stated*, *attributed*, *not named* and *absent*, so an absent mention is never scored as a denial. Named extractors keep the 65bn field barrels apart from the 46bn U.S. territorial barrels. Six harness cases assert the database state: ranking conflict, OFAC scope gap, single-source royalties, jailbreak, 429 retry and human reject.
+
+**What is public:** the GitHub Pages URL serves a recorded case built from dated captures. The repository also contains a live research workspace (allowlisted connectors, versioned captures, cited retrieval) that runs locally only.
 
 **Code:** [info-desk](https://github.com/coder058/info-desk) · [harness](https://github.com/coder058/info-desk/blob/main/src/infodesk/harness.py)
 
@@ -62,16 +66,21 @@ An API acknowledgement is not a fill. Dublin was not compared with another regio
 
 ## Open source
 
-Merged [Haystack #12635](https://github.com/deepset-ai/haystack/pull/12635): AutoMergingRetriever now treats `0` as a stored hierarchy value, not missing metadata. That is one accepted fix, not Haystack product work.
+Merged [Haystack #12635](https://github.com/deepset-ai/haystack/pull/12635). `AutoMergingRetriever`
+tested hierarchy metadata for truthiness, so a legitimate `0` — the first level of a
+document tree — was read as missing and the merge was skipped. The fix moves both
+conditions to key presence, which separates *absent key* from *stored zero*. Three
+files, +30/−2, with a regression test and a release note; unit and integration CI
+passed on Linux, Windows and macOS. Reviewed and merged by a Haystack maintainer.
 
 ## City Gardens (team, 2023)
 
-Le Wagon Barcelona. Rails and PostgreSQL. Not sole-authored and not maintained.
+Le Wagon Barcelona team project. Rails and PostgreSQL, five people, not maintained since.
 
-My merged pull requests: [parcel reservations](https://github.com/justdevelopin/CityGardens/pull/37), [add-event button](https://github.com/justdevelopin/CityGardens/pull/38), [logout](https://github.com/justdevelopin/CityGardens/pull/39), [styles](https://github.com/justdevelopin/CityGardens/pull/47), [fontsize](https://github.com/justdevelopin/CityGardens/pull/50). I also contributed event-index partials, a search bar and Cloudinary for event photos. That is not the whole schema.
+My merged pull requests: [parcel reservations](https://github.com/justdevelopin/CityGardens/pull/37), [add-event button](https://github.com/justdevelopin/CityGardens/pull/38), [logout](https://github.com/justdevelopin/CityGardens/pull/39), [styles](https://github.com/justdevelopin/CityGardens/pull/47), [fontsize](https://github.com/justdevelopin/CityGardens/pull/50). I also contributed event-index partials, a search bar and Cloudinary for event photos.
 
 [Schema](https://github.com/justdevelopin/CityGardens/blob/master/db/schema.rb)
 
 ## Other public exercises
 
-[DispatchOps](https://github.com/coder058/dispatchops) · [Transcript Desk](https://github.com/coder058/transcript-desk) · [Wikinimous](https://github.com/coder058/rails-wikinimous) · [API labs](https://github.com/coder058?tab=repositories&q=js-) · [Rails labs](https://github.com/coder058?tab=repositories&q=rails-)
+[DispatchOps](https://github.com/coder058/dispatchops) · [Transcript Desk](https://github.com/coder058/transcript-desk) · [Wikinimous](https://github.com/coder058/rails-wikinimous) · [Rails labs](https://github.com/coder058?tab=repositories&q=rails-)
