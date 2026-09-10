@@ -36,6 +36,8 @@ npm ci && npm test && npm run build
 
 **What is public:** the GitHub Pages URL serves a recorded case built from dated captures. The repository also contains a live research workspace (allowlisted connectors, versioned captures, cited retrieval) that runs locally only.
 
+**Retrieval evaluation:** [questions, expected quotes and runnable scorer](https://github.com/coder058/info-desk/tree/main/evals). The dated-excerpt development set exposes cross-language misses and questions whose answer is absent despite related search results. These are retrieval checks, not a model-accuracy claim.
+
 **Code:** [info-desk](https://github.com/coder058/info-desk) · [harness](https://github.com/coder058/info-desk/blob/main/src/infodesk/harness.py)
 
 ```
@@ -68,7 +70,7 @@ An API acknowledgement is not a fill. Dublin was not compared with another regio
 
 Merged [Haystack #12635](https://github.com/deepset-ai/haystack/pull/12635). `AutoMergingRetriever`
 tested hierarchy metadata for truthiness, so a legitimate `0` — the first level of a
-document tree — was read as missing and the merge was skipped. The fix moves both
+document tree — was read as missing and validation raised `ValueError`. The fix moves both
 conditions to key presence, which separates *absent key* from *stored zero*. Three
 files, +30/−2, with a regression test and a release note; unit and integration CI
 passed on Linux, Windows and macOS. Reviewed and merged by a Haystack maintainer.
