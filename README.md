@@ -1,88 +1,43 @@
 # Jordi Lluis
 
-Amsterdam. This page is the code index: what each repository does, how the pieces
-fit together and the command that runs it. The written-up version, with the
-reasoning and the data tables, is on the [portfolio](https://coder058.github.io/profile/).
+**Python & data software — market data, reconciliation and operational tools.**
 
-[Portfolio](https://coder058.github.io/profile/) · [Résumé](https://coder058.github.io/profile/resume.html) · [Engineering notes](ENGINEERING.md)
+Amsterdam · EU citizen. My background is in logistics operations and applied finance; the software below is independent project work, separate from employment.
 
-**Live demos:** [Pattern Forge](https://pattern-forge-five.vercel.app/) · [Info Desk](https://coder058.github.io/info-desk/) · [Relay](https://relay-ten-zeta.vercel.app/) · [Python trading bot archive](https://polybow-archive.vercel.app/)
+[Portfolio](https://coder058.github.io/profile/) · [Résumé / ATS PDF](https://coder058.github.io/profile/resume.html) · [Email](mailto:joord918@gmail.com)
 
-## Pattern Forge
+## Polybow — operated system, public postmortem
 
-[![CI](https://github.com/coder058/pattern-forge/actions/workflows/check.yml/badge.svg)](https://github.com/coder058/pattern-forge/actions/workflows/check.yml)
+Built and operated a Python trading system on AWS Lightsail: WebSocket books, signed CLOB requests, cached market metadata and daily JSONL recordings. After live trading stopped, I investigated differences between bot records and account activity.
 
-**Result:** replay without look-ahead; CI runs tests, Docker and a PostgreSQL restart. The public demo does not serve that database.
+The public repository contains accounting, a timing parser, tests and an evidence map — **not the private bot or raw VPS recordings**. An API acknowledgement is not a fill. Attribution is incomplete and the run does not establish durable profitability.
 
-**Architecture:** browser → Next.js candle API → Hyperliquid public quotes. A separate WebSocket carries live mid-price and does not write into replay. Recorded replay uses only the selected prefix; incomplete higher-timeframe groups are omitted, not guessed. Persistence is for local use and CI.
+[Engineering walkthrough](https://coder058.github.io/profile/projects/polybow.html) · [Code and tests](https://github.com/coder058/polybow-case-study) · [Evidence and corrections](https://github.com/coder058/polybow-case-study/blob/main/EVIDENCE.md)
 
-**What I built:** React/TypeScript workspace, validated candle snapshots, Docker build checks and failure-handling tests.
+## Pattern Forge — time-boundary replay and persistence
 
-**Code:** [`app/`](https://github.com/coder058/pattern-forge/tree/main/app) · [closed-candle tests](https://github.com/coder058/pattern-forge/blob/main/tests/public-market.test.mjs) · [ingest](https://github.com/coder058/pattern-forge/tree/main/ingest)
+React/TypeScript workspace with validated candle snapshots, a separate live quote stream, prefix-only replay and a Python/PostgreSQL ingestion path. Tests exclude future candles and incomplete timeframes; CI checks Docker and persistence across a restart.
 
-```
-npm ci && npm test && npm run build
-```
+[Interactive demo](https://pattern-forge-five.vercel.app/) · [Code](https://github.com/coder058/pattern-forge) · [Ingest](https://github.com/coder058/pattern-forge/tree/main/ingest) · [CI](https://github.com/coder058/pattern-forge/actions/workflows/check.yml)
 
-## Info Desk
+The public demo uses recordings and temporary process memory, not hosted PostgreSQL. Local/CI database capability is not a claim about the deployed demo.
 
-[![CI](https://github.com/coder058/info-desk/actions/workflows/ci.yml/badge.svg)](https://github.com/coder058/info-desk/actions/workflows/ci.yml)
+## Info Desk — evidence retrieval with controlled writes
 
-**Result:** OFAC licenses, the White House oil fact sheet and AP quotes on one claims table, each cell carrying the sentence it came from. SQLite writes a note only after a human approves.
+Python/FastAPI and SQLite: versioned source captures, quoted evidence and human approval before publishing notes. Tests cover invalid citations and interrupted jobs.
 
-**Architecture:** three tools (`fetch_source`, `lookup_license`, `search_prior_notes`) → Python claims table / named quantities / license parse → pending draft → `approve()`. Ollama is optional and off in CI.
+[Recorded public case](https://coder058.github.io/info-desk/) · [Code](https://github.com/coder058/info-desk) · [Runnable retrieval evaluation](https://github.com/coder058/info-desk/tree/main/evals)
 
-**What I built:** the claims table distinguishes *stated*, *attributed*, *not named* and *absent*, so an absent mention is never scored as a denial. Named extractors keep the 65bn field barrels apart from the 46bn U.S. territorial barrels. Six harness cases assert the database state: ranking conflict, OFAC scope gap, single-source royalties, jailbreak, 429 retry and human reject.
+The live research workspace runs locally. The evaluation publishes cross-language misses and unanswerable-question limitations; it is not a model-accuracy benchmark or proof of a production AI service.
 
-**What is public:** the GitHub Pages URL serves a recorded case built from dated captures. The repository also contains a live research workspace (allowlisted connectors, versioned captures, cited retrieval) that runs locally only.
+## Open source — merged Haystack contribution
 
-**Retrieval evaluation:** [questions, expected quotes and runnable scorer](https://github.com/coder058/info-desk/tree/main/evals). The dated-excerpt development set exposes cross-language misses and questions whose answer is absent despite related search results. These are retrieval checks, not a model-accuracy claim.
+[Haystack #12635](https://github.com/deepset-ai/haystack/pull/12635): fixed hierarchy-metadata validation that treated a stored zero as missing. Added a regression test and release note; reviewed and merged by a maintainer. The diff and review show the scope of this focused contribution.
 
-**Code:** [info-desk](https://github.com/coder058/info-desk) · [harness](https://github.com/coder058/info-desk/blob/main/src/infodesk/harness.py)
+## Earlier team and additional work
 
-```
-python -m pip install -e ".[dev]" && python -m pytest
-```
+[City Gardens](https://github.com/justdevelopin/CityGardens), Le Wagon team project (2023): my merged work includes [parcel reservations](https://github.com/justdevelopin/CityGardens/pull/37), [add-event button](https://github.com/justdevelopin/CityGardens/pull/38), [logout](https://github.com/justdevelopin/CityGardens/pull/39) and styling. Shared authorship; not maintained as a product.
 
-## Relay
+[Relay](https://github.com/coder058/relay): one Python matcher behind HTTP and MCP. Public backend unavailable; use the repository's local instructions. [DispatchOps](https://github.com/coder058/dispatchops): an operations-inspired prototype, not a deployed warehouse system.
 
-[![CI](https://github.com/coder058/relay/actions/workflows/check.yml/badge.svg)](https://github.com/coder058/relay/actions/workflows/check.yml)
-
-**Architecture:** React UI → stateless FastAPI → one deterministic matcher, also exposed as four read-only MCP tools. Returns quoted sentences, not a hiring score. Paste is the real input; Arbeitnow is a bounded demo snapshot.
-
-**What I built:** `search_job_board`, `summarize_job_board`, `review_job_evidence`, `export_job_review`. Duplicates keep changed wording.
-
-**Code:** [`backend/`](https://github.com/coder058/relay/tree/main/backend) · [evidence tests](https://github.com/coder058/relay/blob/main/backend/tests/test_job_evidence.py) · [MCP](https://github.com/coder058/relay/blob/main/backend/tests/test_job_mcp.py)
-
-Matching is literal. An agent that calls these tools can still summarise; Relay does not decide eligibility.
-
-## Python trading bot
-
-**Decision:** publish the loss and keep branch prices distinct. Early tickets were often $0.96–$0.99; StratA used $0.40–$0.72 with 11–15 seconds remaining; UC looked at leftover $0.01–$0.20 asks.
-
-**What is public:** ledger script, timing parser, browser case study. The private bot is not in this repository. Live trading stopped.
-
-**Code:** [`analyze.py`](https://github.com/coder058/polybow-case-study/blob/main/analyze.py) · [EVIDENCE.md](https://github.com/coder058/polybow-case-study/blob/main/EVIDENCE.md)
-
-An API acknowledgement is not a fill. Dublin was not compared with another region.
-
-## Open source
-
-Merged [Haystack #12635](https://github.com/deepset-ai/haystack/pull/12635). `AutoMergingRetriever`
-tested hierarchy metadata for truthiness, so a legitimate `0` — the first level of a
-document tree — was read as missing and validation raised `ValueError`. The fix moves both
-conditions to key presence, which separates *absent key* from *stored zero*. Three
-files, +30/−2, with a regression test and a release note; unit and integration CI
-passed on Linux, Windows and macOS. Reviewed and merged by a Haystack maintainer.
-
-## City Gardens (team, 2023)
-
-Le Wagon Barcelona team project. Rails and PostgreSQL, five people, not maintained since.
-
-My merged pull requests: [parcel reservations](https://github.com/justdevelopin/CityGardens/pull/37), [add-event button](https://github.com/justdevelopin/CityGardens/pull/38), [logout](https://github.com/justdevelopin/CityGardens/pull/39), [styles](https://github.com/justdevelopin/CityGardens/pull/47), [fontsize](https://github.com/justdevelopin/CityGardens/pull/50). I also contributed event-index partials, a search bar and Cloudinary for event photos.
-
-[Schema](https://github.com/justdevelopin/CityGardens/blob/master/db/schema.rb)
-
-## Other public exercises
-
-[DispatchOps](https://github.com/coder058/dispatchops) · [Transcript Desk](https://github.com/coder058/transcript-desk) · [Wikinimous](https://github.com/coder058/rails-wikinimous) · [Rails labs](https://github.com/coder058?tab=repositories&q=rails-)
+I use AI-assisted development and remain responsible for understanding, testing and reviewing the resulting code. Repository evidence is not a substitute for professional employment years.
