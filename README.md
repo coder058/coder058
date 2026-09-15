@@ -14,6 +14,8 @@ The public repository contains accounting, a timing parser, tests and an evidenc
 
 [Engineering walkthrough](https://coder058.github.io/profile/projects/polybow.html) · [Code and tests](https://github.com/coder058/polybow-case-study) · [Evidence and corrections](https://github.com/coder058/polybow-case-study/blob/main/EVIDENCE.md)
 
+**New, separate demonstrator:** [Reconciliation lab](https://coder058.github.io/profile/projects/reconciliation/) · [Python/PostgreSQL/FastAPI source](https://github.com/coder058/polybow-case-study/tree/main/reconciliation). Atomic imports reject conflicting event IDs; the report preserves partial fills and unknown attribution. [The verified CI run](https://github.com/coder058/polybow-case-study/actions/runs/34887365171) exercised concurrent redelivery, rollback and database restart recovery. The public page is a static export of **synthetic fixtures**, not historical account data or a hosted production API.
+
 ## Pattern Forge — time-boundary replay and persistence
 
 React/TypeScript workspace with validated candle snapshots, a separate live quote stream, prefix-only replay and a Python/PostgreSQL ingestion path. Tests exclude future candles and incomplete timeframes; CI checks Docker and persistence across a restart.
