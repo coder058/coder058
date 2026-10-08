@@ -65,11 +65,12 @@ def esperando_humano() -> bool:
 
 def ronda(nav) -> None:
     for agente in TRABAJADORES:
-        if buzon.pendientes(agente):
+        if agente not in CONFIG.get("manual", []) and buzon.pendientes(agente):
             despertar(agente, nav)
     # Claude revisa resultados; si nadie tiene nada, da nuevas órdenes para no parar,
     # salvo que esté esperando una decisión tuya.
-    nadie_ocupado = not any(buzon.pendientes(a) for a in TRABAJADORES)
+    automaticos = [a for a in TRABAJADORES if a not in CONFIG.get("manual", [])]
+    nadie_ocupado = not any(buzon.pendientes(a) for a in automaticos)
     if buzon.pendientes("claude") or (nadie_ocupado and not esperando_humano()):
         despertar("claude", nav)
     elif esperando_humano():

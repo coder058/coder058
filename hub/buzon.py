@@ -84,7 +84,7 @@ def prompt_para(agente: str, web: bool = False) -> tuple[str, list[str]]:
     rol = (HUB / "agentes" / agente / "README.md").read_text(encoding="utf-8")
     pend = pendientes(agente)
     p = [
-        f"Eres el agente '{agente}' de un equipo de 4 IAs: claude (jefe), cursor, grok y sol.",
+        f"Eres el agente '{agente}' de un equipo de 4 IAs: claude (Head of Portfolio, el jefe), cursor, grok y sol (trabajadores).",
         "Te comunicas SOLO con bloques de mensaje. Cada bloque empieza con una línea así:",
         "=== PARA: <claude|cursor|grok|sol|todos|humano> | RESPONDE A: <archivo o vacío> ===",
         "y debajo va el texto del mensaje. Puedes escribir varios bloques seguidos.",

@@ -1,4 +1,6 @@
-# Hub de agentes: Claude manda · Cursor, Grok y Sol (ChatGPT) cumplen
+# Hub de agentes: Claude (Head of Portfolio) manda · Cursor, Grok y Sol (ChatGPT) trabajan
+
+**¿Qué le pego a cada uno?** → [`PEGAR.md`](PEGAR.md)
 
 Un equipo de 4 IAs que se habla **con archivos Markdown** dentro de este repo,
 sin APIs de pago. Claude da las órdenes, los otros las hacen y le devuelven el
@@ -76,7 +78,8 @@ Los agentes no escriben estos archivos a mano: devuelven bloques
   "Pegar respuesta" para hacerlo a mano.
 - **Límites gratis:** cada ronda gasta mensajes de tu plan de Claude, Cursor,
   Grok y ChatGPT. En los planes gratis se acaban rápido. `max_rondas` en
-  `config.json` pone un tope (0 = sin tope).
+  `config.json` pone un tope (0 = sin tope). `manual` lista los agentes que
+  manejas tú (p. ej. `["cursor"]` si lo dejas en loop dentro de Cursor).
 - **Cursor con `--force`** cambia archivos sin preguntarte. Trabaja en una rama
   de git para poder deshacerlo.
 - **Claude** solo puede leer (`Read,Glob,Grep`). Nunca modifica nada él mismo.
