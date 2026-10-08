@@ -7,6 +7,7 @@ python3 hub/server.py --sin-orquestador  solo el panel, sin despertar a nadie
 import json
 import sys
 import threading
+import webbrowser
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
@@ -83,7 +84,15 @@ class Panel(BaseHTTPRequestHandler):
 
 if __name__ == "__main__":
     buzon.MENSAJES.mkdir(exist_ok=True)
+    try:
+        servidor = ThreadingHTTPServer(("127.0.0.1", PUERTO), Panel)
+    except OSError:
+        print(f"El puerto {PUERTO} ya está en uso: seguramente el panel ya está abierto.")
+        webbrowser.open(f"http://127.0.0.1:{PUERTO}")
+        sys.exit(1)
     if CON_ORQUESTADOR:
         threading.Thread(target=orquestador.bucle, daemon=True).start()
-    print(f"Panel en http://localhost:{PUERTO}  (Ctrl+C para parar)")
-    ThreadingHTTPServer(("127.0.0.1", PUERTO), Panel).serve_forever()
+    url = f"http://127.0.0.1:{PUERTO}"
+    print(f"Panel abierto en {url}  (no cierres esta ventana; Ctrl+C para parar)")
+    webbrowser.open(url)
+    servidor.serve_forever()
