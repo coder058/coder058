@@ -20,9 +20,14 @@ class Navegador:
         self._pw = sync_playwright().start()
         opciones = dict(user_data_dir=str(PERFIL), headless=False, viewport=None)
         try:
-            self.ctx = self._pw.chromium.launch_persistent_context(channel="chrome", **opciones)
+            try:
+                self.ctx = self._pw.chromium.launch_persistent_context(channel="chrome", **opciones)
+            except Exception:
+                self.ctx = self._pw.chromium.launch_persistent_context(**opciones)
         except Exception:
-            self.ctx = self._pw.chromium.launch_persistent_context(**opciones)
+            self._pw.stop()  # si no, el siguiente intento falla con otro error
+            raise RuntimeError("no puedo abrir el navegador: instala Google Chrome "
+                               "o ejecuta  python -m playwright install chromium") from None
         self.paginas = {}
 
     def pagina(self, agente: str):

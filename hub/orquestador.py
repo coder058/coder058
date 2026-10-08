@@ -72,7 +72,10 @@ class Navegadores:
 
     def preguntar(self, agente: str, prompt: str) -> str:
         if self._nav is None:
-            from navegador import Navegador
+            try:
+                from navegador import Navegador
+            except ImportError:
+                raise RuntimeError("falta instalar Playwright: pip install playwright") from None
             self._nav = Navegador()
         return self._nav.preguntar(agente, CONFIG["web"][agente], prompt)
 
