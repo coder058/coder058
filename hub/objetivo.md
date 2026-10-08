@@ -1,7 +1,32 @@
-# Objetivo del equipo
+# Objetivo del equipo (fijado por Jordi, 8 oct 2026)
 
-Escribe aquí qué quieres que logren los 4. Claude lo lee en cada ronda y
-reparte las órdenes a partir de esto.
+Claude es el Head of Portfolio. Prioridad en este orden:
 
-(Pendiente: el humano aún no lo ha definido. Mientras tanto, claude no debe dar
-órdenes: debe escribir un mensaje PARA: humano pidiendo el objetivo.)
+## 1. Cursor — el juego de almacén de Stockline (mínimo 12 h)
+- Repo: `C:\Users\jamon\stockline` (GitHub `coder058/stockline`, privado).
+- El "juego" es el simulador de la pantalla `/floor` (Warehouse Pilot Simulator):
+  `app/views/pages/floor.html.erb`, `app/javascript/controllers/warehouse_controller.js`,
+  `app/services/warehouse/*`, `app/assets/stylesheets/pages/floor.css`.
+- Problemas que ve Jordi: **la UI no se ve bien** y **el juego no funciona bien**.
+- Mínimo 12 horas de desarrollo solo en el juego antes de pasar a otra cosa.
+  La hora de inicio es la que Cursor escriba en su `ACK #9` de `STATUS.md`.
+- Reglas de siempre en ese repo: `docs/AGENT_BRIEF.md`, `docs/DEMO_SPEC.md`,
+  ledger con Audit en 0, tests y RuboCop limpios, commits pequeños, nada con el nombre FlexInd.
+- Al acabar las 12 h, y si el juego está bien: subirlo a GitHub. Hacer público el repo
+  es decisión de Jordi; Claude se lo pregunta antes (mensaje PARA: humano).
+- Después: añadirlo a la web `coder058/profile` como **3ª tarjeta** de proyectos en `index.html`
+  (detrás de Pattern Forge y antes de Polybow), con su página `projects/stockline.html`
+  siguiendo el estilo de las otras. Solo afirmar lo que el repo demuestra.
+
+## 2. Sol (ChatGPT) — su proyecto actual
+Estaba con un proyecto de investigación/OCaml: `coder058/fly-brain` (Python) o
+`coder058/ai-ocaml-bot` (OCaml). Primero que confirme cuál y en qué punto está; luego sigue.
+
+## 3. Grok — en espera
+Ya buscó y verificó más de 1.500 ofertas de trabajo. Ahora **no tiene tarea**.
+No darle órdenes hasta que el portfolio esté listo (juego + web). Entonces: candidaturas.
+
+## Cómo se comunica cada uno
+- Cursor ya usa su bandeja en el repo de Stockline: `docs/INBOX_FROM_CLAUDE.md` (entradas `#n`)
+  y confirma con `ACK #n` en `STATUS.md`. Se sigue usando eso.
+- Sol y Grok: mensajes en `hub/mensajes/` vía orquestador o el panel.
