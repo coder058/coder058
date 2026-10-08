@@ -4,7 +4,7 @@
 
 Un equipo de 4 IAs que se habla **con archivos Markdown** dentro de este repo,
 sin APIs de pago. Claude da las órdenes, los otros las hacen y le devuelven el
-resultado, y Claude revisa y da la siguiente. Se repite cada 5 minutos, sin parar.
+resultado, y Claude revisa y da la siguiente. Se repite cada 2 minutos, sin parar.
 
 ```
            ┌──────────── objetivo.md (lo escribes tú)
@@ -34,9 +34,9 @@ Escribes a Claude en el chat. Él da las órdenes, el orquestador (va dentro del
 servidor) las lleva a Cursor, Grok y Sol, recoge sus respuestas y Claude te
 resume lo que hicieron, en el mismo chat. A la derecha ves quién trabaja.
 
-- Cuando le escribes, Claude despierta al instante (no espera los 5 min).
+- Cuando le escribes, Claude despierta al instante (no espera los 2 min).
 - `"autonomo": false` en `config.json`: Claude solo actúa cuando le escribes tú
-  o le responde un trabajador. Con `true` sigue solo con `objetivo.md` cada 5 min.
+  o le responde un trabajador. Con `true` sigue solo con `objetivo.md` cada 2 min.
 - `"carpetas": {"cursor": "C:\\Users\\jamon\\stockline"}`: carpeta donde trabaja Cursor.
 - `python3 hub/server.py --sin-orquestador`: solo mirar, sin despertar a nadie.
 
@@ -56,7 +56,7 @@ Para pararlo: `Ctrl+C`, o crea el archivo `hub/PARAR`.
 1. Claude lee lo que le escribiste y da las órdenes. Te contesta qué pidió y a quién.
 2. Cursor, Grok y Sol hacen sus órdenes y le responden a Claude.
 3. Claude revisa los resultados y te los resume en el chat (o manda correcciones).
-4. Mientras alguien tenga algo pendiente, se repite enseguida. Si no, espera 5 min
+4. Mientras alguien tenga algo pendiente, se repite enseguida. Si no, espera 2 min
    o hasta que le vuelvas a escribir.
 
 ## Formato de los mensajes
@@ -81,7 +81,7 @@ Los agentes no escriben estos archivos a mano: devuelven bloques
 
 - **Grok y ChatGPT por navegador:** sus condiciones de uso no permiten
   automatizar la web, y podrían limitar o bloquear tu cuenta. Por eso el loop va
-  cada 5 min y no más rápido. Si cambian su página, puede que haya que ajustar
+  cada 2 min y no más rápido. Si cambian su página, puede que haya que ajustar
   `CAMPOS` en `navegador.py`. Si falla, el panel tiene "Copiar prompt" y
   "Pegar respuesta" para hacerlo a mano.
 - **Límites gratis:** cada ronda gasta mensajes de tu plan de Claude, Cursor,

@@ -11,6 +11,7 @@ Para pararlo: Ctrl+C, o crea el archivo hub/PARAR.
 """
 
 import json
+import os
 import shutil
 import subprocess
 import sys
@@ -58,11 +59,35 @@ def correr_cli(agente: str, prompt: str) -> str:
         cmd if por_stdin else cmd + [prompt],
         input=prompt if por_stdin else None,
         cwd=carpeta, capture_output=True, text=True, encoding="utf-8", errors="replace",
-        timeout=CONFIG["timeout_cli_segundos"],
+        timeout=CONFIG["timeout_cli_segundos"], env=entorno_sin_api(),
     )
+    salida = r.stdout + "\n" + r.stderr
+    if any(senal in salida for senal in SENALES_DE_API):
+        raise RuntimeError(AVISO_API)
     if r.returncode != 0 and not r.stdout.strip():
         raise RuntimeError(r.stderr.strip()[:500] or f"salió con código {r.returncode}")
     return r.stdout
+
+
+# Nada de APIs de pago: se quitan las variables que hacen que Claude Code use una API
+# (Google Vertex, Amazon Bedrock o una clave de Anthropic) en vez de tu cuenta de Claude.
+VARIABLES_DE_API = [
+    "CLAUDE_CODE_USE_VERTEX", "CLAUDE_CODE_USE_BEDROCK", "CLAUDE_CODE_USE_FOUNDRY",
+    "ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN", "ANTHROPIC_VERTEX_PROJECT_ID",
+]
+SENALES_DE_API = ["BILLING_DISABLED", "aiplatform.googleapis.com", "requires billing",
+                  "Invalid API key", "credit balance"]
+AVISO_API = (
+    "Claude Code está configurado para usar una API de pago, no tu cuenta de Claude. "
+    "Arréglalo una vez: abre ~/.claude/settings.json (C:\\Users\\jamon\\.claude\\settings.json) "
+    "y borra del bloque \"env\" CLAUDE_CODE_USE_VERTEX, ANTHROPIC_VERTEX_PROJECT_ID y "
+    "ANTHROPIC_API_KEY si aparecen. Luego, en PowerShell: claude, escribe /login y elige "
+    "tu cuenta de Claude (suscripción)."
+)
+
+
+def entorno_sin_api() -> dict:
+    return {k: v for k, v in os.environ.items() if k not in VARIABLES_DE_API}
 
 
 class Navegadores:
