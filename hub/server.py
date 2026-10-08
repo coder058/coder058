@@ -35,7 +35,7 @@ class Panel(BaseHTTPRequestHandler):
             agente = self.path.rsplit("/", 1)[1]
             if agente not in buzon.AGENTES:
                 return self._json({"error": "agente desconocido"}, 404)
-            self._json({"prompt": buzon.prompt_para(agente)})
+            self._json({"prompt": buzon.prompt_para(agente)[0]})
         else:
             self._json({"error": "no existe"}, 404)
 

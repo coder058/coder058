@@ -1,75 +1,82 @@
-# Hub de agentes: Claude · Cursor · Grok · Sol
+# Hub de agentes: Claude manda · Cursor, Grok y Sol (ChatGPT) cumplen
 
-Un buzón de mensajes **hecho solo con archivos Markdown** dentro de este repo.
-Sin APIs y sin servicios de pago: cada agente lee y escribe archivos, y tú
-(o un loop) los despiertas cada 5 minutos.
-
-```
-hub/
-├── README.md            ← este protocolo (todos los agentes lo leen primero)
-├── server.py            ← panel web en http://localhost:8765 (solo Python, sin instalar nada)
-├── vigilar.py           ← loop en terminal: avisa cada 5 min qué agente tiene pendientes
-├── static/index.html    ← la interfaz del panel
-├── agentes/
-│   ├── claude/README.md ← rol + cómo se despierta cada agente
-│   ├── cursor/README.md
-│   ├── grok/README.md
-│   └── sol/README.md
-└── mensajes/            ← un archivo .md por mensaje (el "chat" compartido)
-```
-
-## Cómo funciona un mensaje
-
-Cada mensaje es un archivo en `hub/mensajes/` con este nombre:
+Un equipo de 4 IAs que se habla **con archivos Markdown** dentro de este repo,
+sin APIs de pago. Claude da las órdenes, los otros las hacen y le devuelven el
+resultado, y Claude revisa y da la siguiente. Se repite cada 5 minutos, sin parar.
 
 ```
-AAAAMMDD-HHMMSS-<de>-a-<para>.md      ej: 20261008-193000-claude-a-cursor.md
+           ┌──────────── objetivo.md (lo escribes tú)
+           ▼
+        claude ──órdenes──► cursor (código)   ─┐
+          ▲   └──órdenes──► grok   (investiga) ├─ resultados ─► claude
+          │   └──órdenes──► sol    (ChatGPT)  ─┘
+          └── PARA: humano ──► tú (cuando acaba o necesita decidir)
 ```
 
-y este contenido:
+## Cómo se conecta cada uno (sin API)
+
+| Agente | Cómo lo despierta `orquestador.py` | Qué necesitas |
+|--------|------------------------------------|---------------|
+| claude | `claude -p` (Claude Code, modo sin ventana) | Claude Code instalado con tu suscripción |
+| cursor | `cursor-agent -p --force` (Cursor CLI) | Cursor CLI instalado y sesión iniciada |
+| grok   | Abre grok.com en tu navegador, pega la orden, lee la respuesta | Tu cuenta de Grok |
+| sol    | Abre chatgpt.com en tu navegador, pega la orden, lee la respuesta | Tu cuenta de ChatGPT |
+
+## Puesta en marcha (en tu PC)
+
+```bash
+pip install playwright                 # para manejar el navegador (gratis)
+python3 -m playwright install chromium # solo si no tienes Google Chrome
+curl https://cursor.com/install -fsS | bash   # Cursor CLI; luego: cursor-agent login
+
+python3 hub/orquestador.py --login     # 1ª vez: inicia sesión en Grok y ChatGPT, pulsa Enter
+```
+
+1. Escribe lo que quieres lograr en `hub/objetivo.md`.
+2. Arranca el loop: `python3 hub/orquestador.py`
+3. (Opcional) Míralo en vivo: `python3 hub/server.py` → http://localhost:8765
+
+Para pararlo: `Ctrl+C`, o crea el archivo `hub/PARAR`. Probar una sola vuelta:
+`python3 hub/orquestador.py --una-ronda`. Intervalo y comandos: `hub/config.json`.
+
+## Qué pasa en cada ronda
+
+1. Cursor, Grok y Sol: si tienen órdenes pendientes, las reciben, las hacen y
+   contestan a Claude.
+2. Claude lee los resultados (y los archivos del repo) y da nuevas órdenes.
+   Si nadie tiene trabajo, Claude mira `objetivo.md` y da la siguiente orden.
+3. Si Claude te escribe (PARA: humano), deja de dar órdenes hasta que
+   respondas desde el panel (de: humano, para: claude) o marques su mensaje
+   como respondido.
+
+## Formato de los mensajes
+
+Un archivo por mensaje en `hub/mensajes/`, p. ej. `20261008-193000-claude-a-cursor.md`:
 
 ```markdown
 ---
 de: claude
 para: cursor
 estado: pendiente        # pendiente | respondido
-responde_a:              # nombre del archivo al que contesta (opcional)
+responde_a:              # archivo al que contesta (opcional)
 ---
 
-Texto de la orden o la respuesta.
+Texto de la orden o del resultado.
 ```
 
-## Reglas para TODOS los agentes
+Los agentes no escriben estos archivos a mano: devuelven bloques
+`=== PARA: <agente> | RESPONDE A: <archivo> ===` y el orquestador los convierte.
 
-1. Al despertar, busca en `hub/mensajes/` los archivos con `para: <tu nombre>`
-   (o `para: todos`) y `estado: pendiente`.
-2. Haz lo que pide. Contesta creando un **archivo nuevo** con
-   `de: <tu nombre>`, `para: <quien te escribió>` y `responde_a: <archivo original>`.
-3. Cambia el `estado` del mensaje original a `respondido`.
-4. Nunca borres ni reescribas mensajes de otros, solo su campo `estado`.
-5. Si no hay nada pendiente, no escribas nada.
+## Cosas que debes saber
 
-## Por qué así (y sus límites, sin rodeos)
-
-| Agente | ¿Lee archivos solo? | ¿Puede hacer loop solo cada 5 min? | Puente sin API |
-|--------|---------------------|------------------------------------|----------------|
-| Claude Code | Sí | Sí: `/loop 5m ...` | Directo en el repo |
-| Cursor | Sí (Agent/Composer) | No tiene cron propio | Le dices "revisa tu buzón"; `vigilar.py` te avisa cuándo |
-| Grok (web) | No | No | El panel te arma el prompt → copias/pegas → pegas su respuesta en el panel |
-| Sol | Depende de cuál sea | Depende | Por defecto igual que Grok (copiar/pegar) |
-
-Sin API, Grok y un chat web **no pueden** leer tu disco ni despertarse solos.
-El panel en localhost reduce eso a dos clics: "Copiar prompt" y "Pegar respuesta".
-
-## Arrancar
-
-```bash
-python3 hub/server.py          # abre http://localhost:8765
-python3 hub/vigilar.py         # (otra terminal) aviso cada 5 min
-```
-
-En Claude Code, dentro del repo:
-
-```
-/loop 5m Lee hub/README.md y hub/agentes/claude/README.md y procesa tus mensajes pendientes en hub/mensajes/
-```
+- **Grok y ChatGPT por navegador:** sus condiciones de uso no permiten
+  automatizar la web, y podrían limitar o bloquear tu cuenta. Por eso el loop va
+  cada 5 min y no más rápido. Si cambian su página, puede que haya que ajustar
+  `CAMPOS` en `navegador.py`. Si falla, el panel tiene "Copiar prompt" y
+  "Pegar respuesta" para hacerlo a mano.
+- **Límites gratis:** cada ronda gasta mensajes de tu plan de Claude, Cursor,
+  Grok y ChatGPT. En los planes gratis se acaban rápido. `max_rondas` en
+  `config.json` pone un tope (0 = sin tope).
+- **Cursor con `--force`** cambia archivos sin preguntarte. Trabaja en una rama
+  de git para poder deshacerlo.
+- **Claude** solo puede leer (`Read,Glob,Grep`). Nunca modifica nada él mismo.

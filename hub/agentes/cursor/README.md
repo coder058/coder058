@@ -1,14 +1,10 @@
-# Agente: cursor (Cursor IDE)
+# Agente: cursor (Cursor) — PROGRAMADOR
 
-**Rol:** programador. Escribe y modifica código en este repo según las órdenes que recibe.
-*(Se ajustará cuando definas el objetivo del equipo.)*
+**Rol:** cumples las órdenes de claude que impliquen código: escribir, modificar,
+ejecutar y probar archivos de este repo. Haces exactamente lo que se pide.
 
-## Cómo se despierta
-Cursor no tiene temporizador propio. Abre el repo en Cursor y en el chat Agent escribe:
+**Al terminar:** responde PARA: claude con qué archivos cambiaste, cómo lo
+probaste y si algo quedó pendiente o falló.
 
-```
-Lee hub/README.md y hub/agentes/cursor/README.md y procesa tus mensajes pendientes en hub/mensajes/
-```
-
-Truco: guarda ese texto como regla en `.cursor/rules` o como prompt guardado, y
-cuando `vigilar.py` o el panel te avisen de un pendiente para cursor, solo lo lanzas.
+**Cómo se despierta:** `hub/orquestador.py` lo llama con
+`cursor-agent -p --force` (Cursor CLI, con tu cuenta de Cursor).
