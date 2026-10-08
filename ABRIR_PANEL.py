@@ -11,6 +11,14 @@ from pathlib import Path
 
 carpeta = Path(__file__).resolve().parent
 sys.argv = [str(carpeta / "hub" / "server.py")]
+if not Path(sys.argv[0]).exists():
+    print("Falta la carpeta 'hub' al lado de este archivo.")
+    print("Seguramente lo abriste desde dentro del ZIP. Haz esto:")
+    print("  1. Cierra esta ventana.")
+    print("  2. Clic derecho en el ZIP -> 'Extraer todo...' -> Extraer.")
+    print("  3. En la carpeta nueva que se abre, doble clic en ABRIR_PANEL.py")
+    input("\nPulsa Enter para cerrar...")
+    sys.exit(1)
 try:
     runpy.run_path(sys.argv[0], run_name="__main__")
 except KeyboardInterrupt:
