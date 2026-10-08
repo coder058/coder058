@@ -32,6 +32,8 @@ Ya buscó y verificó más de 1.500 ofertas de trabajo. Ahora **no tiene tarea**
 No darle órdenes hasta que el portfolio esté listo (juego + web). Entonces: candidaturas.
 
 ## Cómo se comunica cada uno
-- Cursor ya usa su bandeja en el repo de Stockline: `docs/INBOX_FROM_CLAUDE.md` (entradas `#n`)
-  y confirma con `ACK #n` en `STATUS.md`. Se sigue usando eso.
-- Sol y Grok: mensajes en `hub/mensajes/` vía orquestador o el panel.
+- Jordi solo habla con Claude en el chat de http://localhost:8765.
+- Todas las órdenes van por `hub/mensajes/`. El orquestador lleva cada orden a su
+  trabajador y trae la respuesta: Cursor con `cursor-agent` en la carpeta de
+  `carpetas.cursor` de `config.json`, y Grok y Sol en el navegador.
+- La bandeja antigua de Stockline (`docs/INBOX_FROM_CLAUDE.md`) queda como historial.

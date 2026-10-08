@@ -1,15 +1,22 @@
-"""Panel local del hub: python3 hub/server.py  ->  http://localhost:8765"""
+"""Panel local: hablas con Claude y él reparte el trabajo.
+
+python3 hub/server.py                  ->  http://localhost:8765 (panel + orquestador)
+python3 hub/server.py --sin-orquestador  solo el panel, sin despertar a nadie
+"""
 
 import json
 import sys
+import threading
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import buzon  # noqa: E402
+import orquestador  # noqa: E402
 
 PUERTO = 8765
 INDEX = Path(__file__).resolve().parent / "static" / "index.html"
+CON_ORQUESTADOR = "--sin-orquestador" not in sys.argv
 
 
 class Panel(BaseHTTPRequestHandler):
@@ -30,7 +37,14 @@ class Panel(BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(cuerpo)
         elif self.path == "/api/mensajes":
-            self._json({"agentes": buzon.AGENTES, "mensajes": buzon.listar()})
+            self._json({
+                "agentes": buzon.AGENTES,
+                "mensajes": buzon.listar(),
+                "orquestador": CON_ORQUESTADOR,
+                "trabajando": orquestador.ESTADO["trabajando"],
+                "log": orquestador.ESTADO["ultimas"][-15:],
+                "web": list(orquestador.CONFIG["web"]),
+            })
         elif self.path.startswith("/api/prompt/"):
             agente = self.path.rsplit("/", 1)[1]
             if agente not in buzon.AGENTES:
@@ -43,14 +57,21 @@ class Panel(BaseHTTPRequestHandler):
         largo = int(self.headers.get("Content-Length", 0))
         datos = json.loads(self.rfile.read(largo) or b"{}")
         try:
-            if self.path == "/api/enviar":
-                archivo = buzon.escribir(datos["de"], datos["para"], datos["cuerpo"], datos.get("responde_a", ""))
+            if self.path == "/api/chat":
+                texto = datos["texto"].strip()
+                if not texto:
+                    raise ValueError("mensaje vacío")
+                # Lo que Claude te dijo ya lo has visto en el chat.
+                for m in buzon.listar():
+                    if m["para"] == "humano" and m["estado"] == "pendiente":
+                        buzon.marcar_respondido(m["archivo"])
+                archivo = buzon.escribir("humano", "claude", texto)
+                orquestador.DESPERTAR.set()
                 self._json({"creado": archivo})
             elif self.path == "/api/importar":
-                self._json({"creados": buzon.importar_respuesta(datos["agente"], datos["texto"])})
-            elif self.path == "/api/respondido":
-                buzon.marcar_respondido(datos["archivo"])
-                self._json({"ok": True})
+                creados = buzon.importar_respuesta(datos["agente"], buzon.recortar_web(datos["texto"]))
+                orquestador.DESPERTAR.set()
+                self._json({"creados": creados})
             else:
                 self._json({"error": "no existe"}, 404)
         except (KeyError, ValueError) as e:
@@ -62,5 +83,7 @@ class Panel(BaseHTTPRequestHandler):
 
 if __name__ == "__main__":
     buzon.MENSAJES.mkdir(exist_ok=True)
-    print(f"Hub en http://localhost:{PUERTO}  (Ctrl+C para parar)")
+    if CON_ORQUESTADOR:
+        threading.Thread(target=orquestador.bucle, daemon=True).start()
+    print(f"Panel en http://localhost:{PUERTO}  (Ctrl+C para parar)")
     ThreadingHTTPServer(("127.0.0.1", PUERTO), Panel).serve_forever()

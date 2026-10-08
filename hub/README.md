@@ -24,32 +24,40 @@ resultado, y Claude revisa y da la siguiente. Se repite cada 5 minutos, sin para
 | grok   | Abre grok.com en tu navegador, pega la orden, lee la respuesta | Tu cuenta de Grok |
 | sol    | Abre chatgpt.com en tu navegador, pega la orden, lee la respuesta | Tu cuenta de ChatGPT |
 
-## Puesta en marcha (en tu PC)
+## Uso normal: solo hablas con Claude
+
+```bash
+python3 hub/server.py      # abre http://localhost:8765
+```
+
+Escribes a Claude en el chat. Él da las órdenes, el orquestador (va dentro del
+servidor) las lleva a Cursor, Grok y Sol, recoge sus respuestas y Claude te
+resume lo que hicieron, en el mismo chat. A la derecha ves quién trabaja.
+
+- Cuando le escribes, Claude despierta al instante (no espera los 5 min).
+- `"autonomo": false` en `config.json`: Claude solo actúa cuando le escribes tú
+  o le responde un trabajador. Con `true` sigue solo con `objetivo.md` cada 5 min.
+- `"carpetas": {"cursor": "C:\\Users\\jamon\\stockline"}`: carpeta donde trabaja Cursor.
+- `python3 hub/server.py --sin-orquestador`: solo mirar, sin despertar a nadie.
+
+## Instalación (una vez, en tu PC)
 
 ```bash
 pip install playwright                 # para manejar el navegador (gratis)
 python3 -m playwright install chromium # solo si no tienes Google Chrome
 curl https://cursor.com/install -fsS | bash   # Cursor CLI; luego: cursor-agent login
-
-python3 hub/orquestador.py --login     # 1ª vez: inicia sesión en Grok y ChatGPT, pulsa Enter
+python3 hub/orquestador.py --login     # inicia sesión en Grok y ChatGPT, pulsa Enter
 ```
 
-1. Escribe lo que quieres lograr en `hub/objetivo.md`.
-2. Arranca el loop: `python3 hub/orquestador.py`
-3. (Opcional) Míralo en vivo: `python3 hub/server.py` → http://localhost:8765
-
-Para pararlo: `Ctrl+C`, o crea el archivo `hub/PARAR`. Probar una sola vuelta:
-`python3 hub/orquestador.py --una-ronda`. Intervalo y comandos: `hub/config.json`.
+Para pararlo: `Ctrl+C`, o crea el archivo `hub/PARAR`.
 
 ## Qué pasa en cada ronda
 
-1. Cursor, Grok y Sol: si tienen órdenes pendientes, las reciben, las hacen y
-   contestan a Claude.
-2. Claude lee los resultados (y los archivos del repo) y da nuevas órdenes.
-   Si nadie tiene trabajo, Claude mira `objetivo.md` y da la siguiente orden.
-3. Si Claude te escribe (PARA: humano), deja de dar órdenes hasta que
-   respondas desde el panel (de: humano, para: claude) o marques su mensaje
-   como respondido.
+1. Claude lee lo que le escribiste y da las órdenes. Te contesta qué pidió y a quién.
+2. Cursor, Grok y Sol hacen sus órdenes y le responden a Claude.
+3. Claude revisa los resultados y te los resume en el chat (o manda correcciones).
+4. Mientras alguien tenga algo pendiente, se repite enseguida. Si no, espera 5 min
+   o hasta que le vuelvas a escribir.
 
 ## Formato de los mensajes
 

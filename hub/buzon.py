@@ -50,12 +50,13 @@ def pendientes(agente: str) -> list[dict]:
 def escribir(de: str, para: str, cuerpo: str, responde_a: str = "") -> str:
     if de not in AGENTES + ["humano"] or para not in DESTINOS:
         raise ValueError("agente desconocido")
-    sello = datetime.now().strftime("%Y%m%d-%H%M%S")
+    ahora = datetime.now()
+    sello = f"{ahora:%Y%m%d-%H%M%S}{ahora.microsecond // 1000:03d}"  # ms: orden exacto en el chat
     ruta = MENSAJES / f"{sello}-{de}-a-{para}.md"
     n = 1
     while ruta.exists():
         n += 1
-        ruta = MENSAJES / f"{sello}-{n}-{de}-a-{para}.md"
+        ruta = MENSAJES / f"{sello}_{n}-{de}-a-{para}.md"  # "_" ordena después de "-"
     ruta.write_text(
         f"---\nde: {de}\npara: {para}\nestado: pendiente\nresponde_a: {responde_a}\n---\n\n{cuerpo.strip()}\n",
         encoding="utf-8",
@@ -73,6 +74,12 @@ def marcar_respondido(archivo: str) -> None:
 def _historial(n: int = 12) -> str:
     ultimos = listar()[-n:]
     return "\n".join(f"- {m['archivo']} ({m['de']} → {m['para']}, {m['estado']})" for m in ultimos) or "(vacío)"
+
+
+def _chat_humano(n: int = 8) -> str:
+    """Últimos mensajes entre el humano y claude, con texto, para que Claude tenga contexto."""
+    chat = [m for m in listar() if {m["de"], m["para"]} == {"humano", "claude"}][-n:]
+    return "\n\n".join(f"{m['de']}: {m['cuerpo'][:800]}" for m in chat) or "(vacío)"
 
 
 def prompt_para(agente: str, web: bool = False) -> tuple[str, list[str]]:
@@ -96,10 +103,10 @@ def prompt_para(agente: str, web: bool = False) -> tuple[str, list[str]]:
         objetivo = OBJETIVO.read_text(encoding="utf-8") if OBJETIVO.exists() else "(sin objetivo)"
         p += [
             "--- OBJETIVO DEL EQUIPO (lo fija el humano) ---", objetivo,
-            "--- ÚLTIMOS MENSAJES ---", _historial(),
+            f"--- AHORA: {datetime.now():%Y-%m-%d %H:%M} ---",
+            "--- CONVERSACIÓN RECIENTE CON EL HUMANO ---", _chat_humano(),
+            "--- ÚLTIMOS MENSAJES DEL EQUIPO ---", _historial(),
             "Puedes leer cualquier archivo del repo (hub/mensajes/ incluido) para revisar el trabajo.",
-            "Da la siguiente orden concreta a quien corresponda. Si el objetivo está cumplido o",
-            "necesitas una decisión, escribe un bloque PARA: humano y no des más órdenes.",
         ]
     p.append(f"--- TUS MENSAJES PENDIENTES ({len(pend)}) ---")
     for m in pend:
