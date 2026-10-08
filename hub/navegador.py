@@ -38,7 +38,7 @@ class Navegador:
     def abrir(self, agente: str, url: str):
         self.pagina(agente).goto(url)
 
-    def preguntar(self, agente: str, url: str, prompt: str, espera_max: int = 600) -> str:
+    def preguntar(self, agente: str, url: str, prompt: str, espera_max: int = 240) -> str:
         """Abre un chat nuevo, envía el prompt y devuelve la respuesta recortada."""
         p = self.pagina(agente)
         p.goto(url)
@@ -52,7 +52,8 @@ class Navegador:
             except Exception:
                 continue
         if campo is None:
-            raise RuntimeError(f"{agente}: no encuentro la caja de texto (¿sesión cerrada? usa --login)")
+            raise RuntimeError(f"{agente}: no encuentro dónde escribir. Mira su ventana de Chrome e inicia "
+                               "sesión ahí (se guarda); se reintenta solo")
 
         antes = p.inner_text("body").count(buzon.FIN)
         campo.click()
@@ -72,7 +73,8 @@ class Navegador:
                 if estable >= 2:
                     return buzon.recortar_web(texto)
             ultimo = texto
-        raise TimeoutError(f"{agente}: no terminó de responder en {espera_max}s")
+        raise TimeoutError(f"{agente}: sin respuesta en {espera_max // 60} min. Mira su ventana de Chrome: "
+                           "si pide iniciar sesión, inicia sesión ahí (se guarda) y se reintenta solo")
 
     def cerrar(self):
         self.ctx.close()

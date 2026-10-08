@@ -29,8 +29,9 @@ LOG = HUB / "orquestador.log"
 TRABAJADORES = ["cursor", "grok", "sol"]
 
 # Lo que el panel enseña: quién está trabajando ahora y las últimas líneas del log.
-ESTADO = {"trabajando": None, "ultimas": []}
-DESPERTAR = threading.Event()  # el panel lo activa cuando le escribes a Claude
+ESTADO = {"trabajando": [], "ultimas": []}
+DESPERTAR = threading.Event()  # despierta a Claude: le escribes tú o responde un trabajador
+DESPERTAR_TRABAJO = threading.Event()  # despierta a los trabajadores: Claude dio órdenes
 
 
 def log(texto: str):
@@ -84,12 +85,12 @@ class Navegadores:
             self._nav.cerrar()
 
 
-def despertar(agente: str, navs: Navegadores) -> bool:
+def despertar(agente: str, navs: Navegadores | None) -> bool:
     """Devuelve True si el agente respondió."""
     web = agente in CONFIG["web"]
     prompt, incluidos = buzon.prompt_para(agente, web=web)
     log(f"{agente}: despierta con {len(incluidos)} mensaje(s)")
-    ESTADO["trabajando"] = agente
+    ESTADO["trabajando"].append(agente)
     try:
         salida = navs.preguntar(agente, prompt) if web else correr_cli(agente, prompt)
     except Exception as e:  # un agente caído no detiene a los demás
@@ -100,7 +101,7 @@ def despertar(agente: str, navs: Navegadores) -> bool:
                 buzon.marcar_respondido(archivo)
         return False
     finally:
-        ESTADO["trabajando"] = None
+        ESTADO["trabajando"].remove(agente)
     creados = buzon.importar_respuesta(agente, salida, incluidos)
     log(f"{agente}: escribió {', '.join(creados) or 'nada'}")
     return True
@@ -110,43 +111,65 @@ def esperando_humano() -> bool:
     return any(m["para"] == "humano" and m["estado"] == "pendiente" for m in buzon.listar())
 
 
-def ronda(navs: Navegadores) -> bool:
-    """Una vuelta. Devuelve True si alguien trabajó."""
+def turno_claude() -> bool:
+    if buzon.pendientes("claude"):
+        return despertar("claude", None)
+    if (CONFIG.get("autonomo") and not esperando_humano()
+            and not any(buzon.pendientes(a) for a in automaticos())):
+        return despertar("claude", None)  # modo autónomo: sigue con objetivo.md sin que le escribas
+    return False
+
+
+def turno_trabajadores(navs: Navegadores) -> bool:
     # Si alguien falla (no instalado, sesión caída...) no cuenta como trabajo,
     # así no se reintenta cada 5 s sino en la siguiente vuelta de 5 min.
     hubo = False
-    # Claude primero: así lo que le pides llega a los trabajadores en la misma vuelta.
-    if buzon.pendientes("claude"):
-        hubo |= despertar("claude", navs)
     for agente in automaticos():
-        if buzon.pendientes(agente):
-            hubo |= despertar(agente, navs)
-    if buzon.pendientes("claude"):
-        hubo |= despertar("claude", navs)  # resultados recién llegados: Claude te los resume
-    elif (not hubo and CONFIG.get("autonomo") and not esperando_humano()
-          and not any(buzon.pendientes(a) for a in automaticos())):
-        hubo |= despertar("claude", navs)  # modo autónomo: sigue con objetivo.md sin que le escribas
+        if buzon.pendientes(agente) and despertar(agente, navs):
+            hubo = True
+            DESPERTAR.set()  # Claude revisa el resultado sin esperar a los demás
     return hubo
+
+
+def carril_claude() -> None:
+    """Tú y Claude: nunca espera a que un trabajador termine."""
+    while not PARAR.exists():
+        DESPERTAR.clear()
+        if turno_claude():
+            DESPERTAR_TRABAJO.set()  # puede haber órdenes nuevas
+        DESPERTAR.wait(CONFIG["intervalo_segundos"])
+
+
+def carril_trabajadores() -> None:
+    """Cursor, Grok y Sol, de uno en uno (el navegador solo se usa desde este hilo)."""
+    navs = Navegadores()
+    try:
+        while not PARAR.exists():
+            DESPERTAR_TRABAJO.clear()
+            hubo = turno_trabajadores(navs)
+            DESPERTAR_TRABAJO.wait(5 if hubo else CONFIG["intervalo_segundos"])
+    finally:
+        navs.cerrar()
 
 
 def bucle(una_ronda: bool = False) -> None:
     buzon.MENSAJES.mkdir(exist_ok=True)
-    navs = Navegadores()
-    n = 0
-    try:
-        while not PARAR.exists():
-            n += 1
-            DESPERTAR.clear()
-            hubo = ronda(navs)
-            if una_ronda or n == CONFIG["max_rondas"]:
-                break
-            # Si hubo trabajo, se sigue enseguida hasta que nadie tenga nada pendiente.
-            # Si no, espera 5 min o hasta que le escribas a Claude en el panel.
-            DESPERTAR.wait(5 if hubo else CONFIG["intervalo_segundos"])
-        if PARAR.exists():
-            log("encontré hub/PARAR: me detengo")
-    finally:
-        navs.cerrar()
+    if una_ronda:
+        navs = Navegadores()
+        try:
+            turno_claude()
+            turno_trabajadores(navs)
+            turno_claude()
+        finally:
+            navs.cerrar()
+        return
+    hilos = [threading.Thread(target=carril_claude, daemon=True),
+             threading.Thread(target=carril_trabajadores, daemon=True)]
+    for h in hilos:
+        h.start()
+    while any(h.is_alive() for h in hilos):
+        time.sleep(1)
+    log("encontré hub/PARAR: me detengo")
 
 
 def main():

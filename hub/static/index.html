@@ -81,15 +81,15 @@ async function cargar() {
     vistos = chat.length;
   }
   $("#pensando")?.remove();
-  const espera = ms.some(m => m.para === "claude" && m.estado === "pendiente") || d.trabajando;
-  if (espera) caja.insertAdjacentHTML("beforeend", `<div class="pensando" id="pensando">${d.trabajando ? esc(d.trabajando) + " está trabajando…" : "Claude lo verá en un momento…"}</div>`);
+  const claudePiensa = d.trabajando.includes("claude") || ms.some(m => m.para === "claude" && m.estado === "pendiente");
+  if (claudePiensa) caja.insertAdjacentHTML("beforeend", `<div class="pensando" id="pensando">Claude está pensando…</div>`);
 
   // Trabajadores
   $("#trabajadores").innerHTML = ["cursor", "grok", "sol"].map(a => {
     const pend = ms.filter(m => m.para === a && m.estado === "pendiente").length;
     const ultima = ms.filter(m => m.de === a).pop();
-    const estado = d.trabajando === a ? "activo" : (ultima ? "ok" : "");
-    const txt = d.trabajando === a ? "trabajando ahora" : pend ? `${pend} orden(es) en cola` : ultima ? "respondió" : "sin actividad";
+    const estado = d.trabajando.includes(a) ? "activo" : (ultima ? "ok" : "");
+    const txt = d.trabajando.includes(a) ? "trabajando ahora" : pend ? `${pend} orden(es) en cola` : ultima ? "respondió" : "sin actividad";
     const manual = d.web.includes(a) && pend ? `<details><summary>¿El navegador falla? Hazlo a mano</summary>
         <button onclick="copiar('${a}')">Copiar prompt</button>
         <textarea id="resp-${a}" placeholder="Pega aquí lo que respondió ${a}"></textarea>
