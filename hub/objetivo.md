@@ -14,9 +14,14 @@ Claude es el Head of Portfolio. Prioridad en este orden:
   ledger con Audit en 0, tests y RuboCop limpios, commits pequeños, nada con el nombre FlexInd.
 - Al acabar las 12 h, y si el juego está bien: subirlo a GitHub. Hacer público el repo
   es decisión de Jordi; Claude se lo pregunta antes (mensaje PARA: humano).
-- Después: añadirlo a la web `coder058/profile` como **3ª tarjeta** de proyectos en `index.html`
-  (detrás de Pattern Forge y antes de Polybow), con su página `projects/stockline.html`
-  siguiendo el estilo de las otras. Solo afirmar lo que el repo demuestra.
+- Después: reordenar las tarjetas de proyectos de la web `coder058/profile` (`index.html`)
+  en este orden:
+  1. **Stockline (WMS)**: tarjeta nueva, con su página `projects/stockline.html`.
+  2. **Polybow**.
+  3. **Fly Brain**: pasa de la caja "Research in progress" a tarjeta propia
+     (su página `projects/fly-brain.html` ya existe).
+  4. Los demás: Info Desk, Pattern Forge, Energy Monitor.
+  Mismo estilo que las tarjetas actuales. Solo afirmar lo que cada repo demuestra.
 
 ## 2. Sol (ChatGPT) — su proyecto actual
 Estaba con un proyecto de investigación/OCaml: `coder058/fly-brain` (Python) o
