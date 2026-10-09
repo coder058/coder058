@@ -30,7 +30,7 @@ LOG = HUB / "orquestador.log"
 TRABAJADORES = ["cursor", "grok", "sol"]
 
 # Lo que el panel enseña: quién está trabajando ahora y las últimas líneas del log.
-ESTADO = {"trabajando": [], "ultimas": []}
+ESTADO = {"trabajando": [], "ultimas": [], "errores": {}}
 DESPERTAR = threading.Event()  # despierta a Claude: le escribes tú o responde un trabajador
 DESPERTAR_TRABAJO = threading.Event()  # despierta a los trabajadores: Claude dio órdenes
 
@@ -64,6 +64,11 @@ def correr_cli(agente: str, prompt: str) -> str:
     salida = r.stdout + "\n" + r.stderr
     if any(senal in salida for senal in SENALES_DE_API):
         raise RuntimeError(AVISO_API)
+    corta = r.returncode != 0 or len(r.stdout) < 400  # una respuesta normal puede hablar de "límites"
+    if corta and any(senal in salida.lower() for senal in SENALES_DE_LIMITE):
+        linea = next((l for l in salida.splitlines() if "limit" in l.lower()), "").strip()
+        raise RuntimeError(f"tu plan de Claude ha llegado a su límite de uso ({linea}). "
+                           "Vuelve a escribirme cuando se renueve; no hace falta pagar nada.")
     if r.returncode != 0 and not r.stdout.strip():
         raise RuntimeError(r.stderr.strip()[:500] or f"salió con código {r.returncode}")
     return r.stdout
@@ -77,6 +82,7 @@ VARIABLES_DE_API = [
 ]
 SENALES_DE_API = ["BILLING_DISABLED", "aiplatform.googleapis.com", "requires billing",
                   "Invalid API key", "credit balance"]
+SENALES_DE_LIMITE = ["hit your weekly limit", "usage limit", "hit your limit", "limit reached"]
 AVISO_API = (
     "Claude Code está configurado para usar una API de pago, no tu cuenta de Claude. "
     "Arréglalo una vez: abre ~/.claude/settings.json (C:\\Users\\jamon\\.claude\\settings.json) "
@@ -120,6 +126,7 @@ def despertar(agente: str, navs: Navegadores | None) -> bool:
         salida = navs.preguntar(agente, prompt) if web else correr_cli(agente, prompt)
     except Exception as e:  # un agente caído no detiene a los demás
         log(f"{agente}: ERROR {e}")
+        ESTADO["errores"][agente] = str(e)
         if agente == "claude":
             buzon.escribir("claude", "humano", f"No he podido ejecutarme: {e}")
             for archivo in incluidos:
@@ -127,6 +134,7 @@ def despertar(agente: str, navs: Navegadores | None) -> bool:
         return False
     finally:
         ESTADO["trabajando"].remove(agente)
+    ESTADO["errores"].pop(agente, None)
     creados = buzon.importar_respuesta(agente, salida, incluidos)
     log(f"{agente}: escribió {', '.join(creados) or 'nada'}")
     return True

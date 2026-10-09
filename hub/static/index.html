@@ -34,6 +34,7 @@
   @keyframes lat { to { opacity:.3 } }
   details { margin-top:6px } summary { cursor:pointer; font-size:13px; color:var(--mut) }
   details textarea { width:100%; height:80px; margin-top:6px }
+  .aviso { font-size:12px; color:var(--ac); margin-top:4px }
   .log { font:12px/1.4 ui-monospace,monospace; color:var(--mut); white-space:pre-wrap; margin-top:16px }
   .actividad { font-size:13px; border-left:2px solid var(--bd); padding-left:8px; margin:6px 0 }
 </style>
@@ -43,7 +44,7 @@
   <main class="chat">
     <header>
       <h1>Claude · Head of Portfolio</h1>
-      <div class="mut" id="sub">Háblame aquí. Yo reparto el trabajo a Cursor, Grok y Sol y te cuento lo que respondan.</div>
+      <div class="mut" id="sub">Háblame solo a mí. Yo reparto el trabajo a Cursor, Grok y Sol y te cuento lo que respondan. <span id="version"></span></div>
     </header>
     <div id="mensajes"></div>
     <form id="form">
@@ -54,7 +55,7 @@
   <aside class="lado">
     <h2>Trabajadores</h2>
     <div id="trabajadores"></div>
-    <h2 style="margin-top:16px">Actividad</h2>
+    <h2 style="margin-top:16px">Lo que hablan entre ellos</h2>
     <div id="actividad"></div>
     <div class="log" id="log"></div>
   </aside>
@@ -69,6 +70,7 @@ let vistos = -1;
 async function cargar() {
   const d = await api("/api/mensajes");
   const ms = d.mensajes;
+  $("#version").textContent = "· versión " + d.version;
 
   // Chat: solo tú y Claude.
   const chat = ms.filter(m => (m.de === "humano" && m.para === "claude") || (m.de === "claude" && m.para === "humano"));
@@ -90,27 +92,14 @@ async function cargar() {
     const ultima = ms.filter(m => m.de === a).pop();
     const estado = d.trabajando.includes(a) ? "activo" : (ultima ? "ok" : "");
     const txt = d.trabajando.includes(a) ? "trabajando ahora" : pend ? `${pend} orden(es) en cola` : ultima ? "respondió" : "sin actividad";
-    const manual = d.web.includes(a) && pend ? `<details><summary>¿El navegador falla? Hazlo a mano</summary>
-        <button onclick="copiar('${a}')">Copiar prompt</button>
-        <textarea id="resp-${a}" placeholder="Pega aquí lo que respondió ${a}"></textarea>
-        <button onclick="importar('${a}')">Pegar respuesta</button></details>` : "";
-    return `<div class="trab"><strong>${a} <span class="punto ${estado}"></span></strong><div class="mut">${ROL[a]} · ${txt}</div>${manual}</div>`;
+    const error = d.errores[a] ? `<div class="aviso">${esc(d.errores[a])}</div>` : "";
+    return `<div class="trab"><strong>${a} <span class="punto ${estado}"></span></strong><div class="mut">${ROL[a]} · ${txt}</div>${error}</div>`;
   }).join("");
 
   // Actividad del equipo (órdenes y respuestas entre Claude y los trabajadores)
   const equipo = ms.filter(m => m.de !== "humano" && m.para !== "humano").slice(-8).reverse();
   $("#actividad").innerHTML = equipo.map(m => `<div class="actividad"><strong>${m.de} → ${m.para}</strong> <span class="mut">${m.estado}</span><br>${esc(m.cuerpo.slice(0, 120))}${m.cuerpo.length > 120 ? "…" : ""}</div>`).join("") || `<div class="mut">Nada todavía.</div>`;
   $("#log").textContent = d.orquestador ? d.log.slice(-6).join("\n") : "Orquestador apagado (--sin-orquestador): nadie se despierta solo.";
-}
-
-async function copiar(a) {
-  const {prompt} = await api("/api/prompt/" + a);
-  await navigator.clipboard.writeText(prompt);
-  alert(`Prompt de ${a} copiado. Pégalo en su chat.`);
-}
-async function importar(a) {
-  const texto = $("#resp-" + a).value.trim();
-  if (texto) { await api("/api/importar", {agente: a, texto}); cargar(); }
 }
 
 $("#form").onsubmit = async e => {

@@ -45,6 +45,8 @@ class Panel(BaseHTTPRequestHandler):
                 "trabajando": orquestador.ESTADO["trabajando"],
                 "log": orquestador.ESTADO["ultimas"][-15:],
                 "web": list(orquestador.CONFIG["web"]),
+                "errores": orquestador.ESTADO["errores"],
+                "version": (Path(__file__).resolve().parent / "VERSION").read_text(encoding="utf-8").strip(),
             })
         elif self.path.startswith("/api/prompt/"):
             agente = self.path.rsplit("/", 1)[1]
