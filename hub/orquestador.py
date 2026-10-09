@@ -24,7 +24,15 @@ HUB = Path(__file__).resolve().parent
 sys.path.insert(0, str(HUB))
 import buzon  # noqa: E402
 
-CONFIG = json.loads((HUB / "config.json").read_text(encoding="utf-8"))
+# Valores por defecto: un config.json antiguo al que le falte algo sigue funcionando.
+POR_DEFECTO = {
+    "intervalo_segundos": 120, "max_rondas": 0, "timeout_cli_segundos": 900,
+    "autonomo": False, "manual": [], "entrada": {"claude": "stdin"}, "carpetas": {},
+    "cli": {"claude": ["claude", "-p", "--allowedTools", "Read,Glob,Grep"],
+            "cursor": ["cursor-agent", "-p", "--force", "--output-format", "text"]},
+    "web": {"grok": "https://grok.com/", "sol": "https://chatgpt.com/"},
+}
+CONFIG = {**POR_DEFECTO, **json.loads((HUB / "config.json").read_text(encoding="utf-8"))}
 PARAR = HUB / "PARAR"
 LOG = HUB / "orquestador.log"
 TRABAJADORES = ["cursor", "grok", "sol"]
